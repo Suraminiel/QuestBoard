@@ -1,0 +1,45 @@
+﻿@model QuestBoard.Models.ViewModes.EditTagRequest
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="py-2 mb-5" id="siteHeader">
+    <div class="container">
+        <h2>Edit Tag</h2>
+    </div>
+</div>
+
+<div class="container  ">
+    @if (Model != null)
+    {
+        <form method="post">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control  bg-dark text-light" id="id" asp-for="Id" readonly/>
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control  bg-dark text-light" id="name" asp-for="Name" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">DisplayName</label>
+                <input type="text" class="form-control bg-dark text-light" id="displayName" asp-for="DisplayName" />
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success type="submit">Update</button>
+                <button type="submit" class="btn btn-danger ms-2"
+                        asp-area=""
+                        asp-controller="AdminTag"
+                        asp-action="Delete">
+                        Delete</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <p>Nothing found</p>
+    }
+</div>

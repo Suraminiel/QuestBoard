@@ -31,7 +31,7 @@ body {
   text-align: start;
 }
 
-.navbar {
+.navbar  {
     border-bottom: 1px solid grey;
     background-color: #1b1d1f;
 }
@@ -47,4 +47,13 @@ footer {
 
 .dropdown-menu {
     background-color: #4b5057;
+}
+
+#siteHeader {
+    border-bottom: 1px solid grey;
+}
+
+.maincontainer {
+    border: 1px solid grey;
+    border-radius: 10px;
 }

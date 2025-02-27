@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuestBoard.Data;
+using QuestBoard.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<QuestboardDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("QuestboardDbConnectionString")));
+
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 
