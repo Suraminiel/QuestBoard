@@ -5,7 +5,7 @@ namespace QuestBoard.Controllers
     public class QuestController : Controller
     {
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             return View();
         }

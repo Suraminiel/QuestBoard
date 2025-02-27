@@ -51,6 +51,27 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Admin
+                            </a>
+                            <ul class="dropdown-menu   ">
+                                <li>
+                                    <a class="dropdown-item text-light"
+                                       asp-area=""
+                                       asp-controller="Admin"
+                                       asp-action="AddTag">New Tag</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-light"
+                                       asp-area=""
+                                       asp-controller="Admin"
+                                       asp-action="ListTag">Show Tag</a>
+                                </li>
+                                
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

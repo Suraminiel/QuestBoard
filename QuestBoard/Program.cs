@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using QuestBoard.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<QuestboardDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("QuestboardDbConnectionString")));
 
 var app = builder.Build();
 
