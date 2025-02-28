@@ -11,6 +11,7 @@ builder.Services.AddDbContext<QuestboardDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("QuestboardDbConnectionString")));
 
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IQuestboardTaskRepository, QuestboardTaskRepository>();
 
 var app = builder.Build();
 

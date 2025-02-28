@@ -1,26 +1,69 @@
-﻿@*
+﻿@model List<QuestBoard.Models.Domain.JobTask>
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
+<div class="py-2 mb-5" id="siteHeader">
+    <div class="container">
+        <h2>Open Tasks</h2>
+    </div>
+</div>
+
 <div class="container">
-    <p>View open Tasks</p>
+    @if(Model != null && Model.Any())
+    {
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                   
+                    <td>Name</td>
+                    <td>Tags</td>
+                    <td>Assigned Workers</td>
+                    <td>Progress</td>
+                    <td>Priority</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var JobTask in Model)
+                {
+                    <tr>
+                        
+                        <td>@JobTask.Name</td>
+                        <td>
+                            <div class="d-flex">
+                                @foreach(var tag in JobTask.Tags)
+                                {
+                                    <span class="badge bg-body-secondary text-dark me-1">@tag.Name</span>
+                                }
+                            </div>
+                        </td>
+                        <td>Worker 1</td>
+                        <td>X/X</td>
 
-    Die Wahl der Begriffe kann tatsächlich einen Einfluss darauf haben, wie Arbeitgeber deine Bewerbungsunterlagen oder dein Verhalten wahrnehmen. Hier sind einige Überlegungen dazu, ob die Verwendung von „Quests“ anstelle von „Tasks“ ansprechend oder abschreckend wirken könnte:
+                        <td>High</td>
 
-    Ansprechend:
-    Kreativität: Der Begriff „Quests“ könnte Kreativität und eine innovative Denkweise signalisieren. Es könnte zeigen, dass du die Aufgaben nicht nur als Pflichtaufgaben betrachtest, sondern als herausfordernde Ziele, die du erreichen möchtest.
+                        <td>
+                            <a asp-area=""
+                               asp-controller="Quest"
+                               asp-action="Edit"
+                               asp-route-id="@JobTask.Id">
+                                Open
+                            </a>
+                        </td>
+                    </tr>
+                }
+               
+            </tbody>
 
-    Engagement: „Quests“ vermitteln möglicherweise ein Gefühl von Abenteuer und Engagement. Es könnte den Eindruck erwecken, dass du leidenschaftlich und motiviert an die Arbeit herangehst.
+        </table>
+    }
+    else
+    {
+        <p>nothing found!</p>
+    }
 
-    Teamgeist: Wenn du in einem Team arbeitest, kann die Verwendung von „Quests“ darauf hinweisen, dass du die Zusammenarbeit und die gemeinsamen Ziele schätzt.
-
-    Abschreckend:
-    Unklarheit: Manche Arbeitgeber könnten den Begriff „Quests“ als zu informell oder unklar empfinden. Sie könnten sich fragen, was du genau mit „Quests“ meinst, insbesondere in einem professionellen Kontext.
-
-    Unprofessionell: In konservativeren Branchen könnte die Verwendung eines spielerischen Begriffs wie „Quests“ unprofessionell wirken. Arbeitgeber könnten das Gefühl haben, dass du die Ernsthaftigkeit der Aufgaben unterschätzt.
-
-    Fazit:
-    Es hängt stark von der Unternehmenskultur und der Branche ab, in der du dich bewirbst. In kreativeren, technologieorientierten oder spielbezogenen Bereichen könnte der Begriff „Quests“ gut ankommen. In traditionelleren oder formelleren Branchen wäre es möglicherweise besser, die gebräuchlicheren Begriffe wie „Tasks“ oder „Projects“ zu verwenden. Es ist immer eine gute Idee, die Sprache und den Stil des Unternehmens, bei dem du dich bewirbst, zu berücksichtigen.
+   
 </div>

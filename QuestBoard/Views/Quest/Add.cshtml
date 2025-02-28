@@ -1,9 +1,62 @@
-﻿@*
+﻿@model QuestBoard.Models.ViewModes.AddTaskRequest
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
+<div class="py-2 mb-5" id="siteHeader">
+    <div class="container">
+        <h2>New Task</h2>
+    </div>
+</div>
+
 <div class="container">
-    <p>Add a new Quest</p>
+    @if (Model != null)
+    {
+        <!--maincontainer -->
+        <form method="post">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Task Name</label>
+                <input type="text" class="form-control  bg-dark text-light" id="name" asp-for="Name" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control bg-dark text-light" id="description" asp-for="Description" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <input type="text" class="form-control bg-dark text-light" id="type" asp-for="Type" />
+            </div>
+
+            <!-- add Subtasks -->
+
+            <div class="mb-3">
+                <label class="form-label ">Tags</label>
+                <select class="form-select bg-dark text-light"
+                        asp-items="@Model.Tags"
+                        asp-for="SelectedTags">
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Published Date</label>
+                <input type="date" class="form-control bg-dark text-light" id="publishedDate" asp-for="PublishedDate" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Author</label>
+                <input type="text" class="form-control bg-dark text-light" id="author" asp-for="Author" />
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success type="submit">Save</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <p>nothing found</p>
+    }
+
 </div>
