@@ -30,6 +30,14 @@
             </div>
 
             <!-- add Subtasks -->
+            <div class="mb-3">
+                <label class="form-label">Subtask</label>
+                <div id="subtask-container">
+
+                </div>
+                <button type="button" class="btn btn-secondary mb-3" id="add-subtask">Add Subtask</button>
+            </div>
+           
 
             <div class="mb-3">
                 <label class="form-label ">Tags</label>
@@ -48,7 +56,14 @@
                 <label class="form-label">Author</label>
                 <input type="text" class="form-control bg-dark text-light" id="author" asp-for="Author" />
             </div>
-
+            <div class="form-group">
+                <label for="Priority">Priority</label>
+                <select name="Priority" class="form-control" asp-for="Priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
             <div class="mb-3">
                 <button class="btn btn-success type="submit">Save</button>
             </div>
@@ -60,3 +75,20 @@
     }
 
 </div>
+
+@section Scripts {
+    <script>
+            document.getElementById("add-subtask").addEventListener("click", function() {
+            let container = document.getElementById("subtask-container");
+
+            let index = container.children.length;
+            let subtaskHtml = `
+                <div class="mb-2">
+                    <input type="text" name="Subtasks[${index}].Name" class="form-control" placeholder="Subtask Name" />
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">X</button>
+                </div>
+            `;
+            container.insertAdjacentHTML("beforeend", subtaskHtml);
+        });
+    </script>
+}

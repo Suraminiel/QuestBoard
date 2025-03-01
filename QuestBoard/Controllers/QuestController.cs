@@ -34,9 +34,11 @@ namespace QuestBoard.Controllers
             {
                 Name = addTaskRequest.Name,
                 Description = addTaskRequest.Description,
+                Subtasks = addTaskRequest.Subtasks.Select(s => new Subtask {Name = s.Name }).ToList(),
                 Type = addTaskRequest.Type,
                 PublishedDate = addTaskRequest.PublishedDate,
                 Author = addTaskRequest.Author,
+                Priority = addTaskRequest.Priority,
             };
 
             // Map Tags from selected Tags
@@ -79,9 +81,11 @@ namespace QuestBoard.Controllers
                     Id = taskJob.Id,
                     Name = taskJob.Name,
                     Description = taskJob.Description,
+                    Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
                     Type = taskJob.Type,
                     PublishedDate = taskJob.PublishedDate,
                     Author = taskJob.Author,
+                    Priority = taskJob.Priority,
                     Tags = tagsDomainModel.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                     {
                         Text = x.Name,
@@ -104,9 +108,11 @@ namespace QuestBoard.Controllers
                 Id = editTaskRequest.Id,
                 Name = editTaskRequest.Name,
                 Description = editTaskRequest.Description,
+                Subtasks = editTaskRequest.Subtasks != null ? editTaskRequest.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList() : new List<Subtask>(),
                 Type = editTaskRequest.Type,
                 PublishedDate = editTaskRequest.PublishedDate,
                 Author = editTaskRequest.Author,
+                Priority = editTaskRequest.Priority,
 
             };
 
@@ -127,7 +133,7 @@ namespace QuestBoard.Controllers
             JobTaskDomainModel.Tags = selectedTags;
 
             // Submit Info to repositiroy
-            var updatedJobTask = await questboardTaskRepository.UpdateAsync(JobTaskDomainModel);
+            var updatedJobTask = await questboardTaskRepository.UpdateAsync(JobTaskDomainModel, editTaskRequest.DeletedSubtaskIds);
             if (updatedJobTask != null)
             {
                 // show success notification

@@ -11,7 +11,9 @@ namespace QuestBoard.Models.ViewModes
         public List<Subtask> Subtasks { get; set; }
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
-        
+
+        public PriorityLevel Priority { get; set; }
+
         //Display tags
         public IEnumerable<SelectListItem> Tags { get; set; }
         // Collect Tags

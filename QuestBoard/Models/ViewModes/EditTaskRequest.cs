@@ -10,9 +10,10 @@ namespace QuestBoard.Models.ViewModes
         public string Description { get; set; }
         public string Type { get; set; }
         public List<Subtask> Subtasks { get; set; }
+        public string DeletedSubtaskIds { get; set; }
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
-
+        public PriorityLevel Priority { get; set; }
         //Display tags
         public IEnumerable<SelectListItem> Tags { get; set; }
         // Collect Tags

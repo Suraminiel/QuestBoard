@@ -1,5 +1,11 @@
 ﻿namespace QuestBoard.Models.Domain
 {
+    public enum PriorityLevel
+    {
+        Low,
+        Medium,
+        High
+    }
     public class JobTask
     {
         public Guid Id { get; set; }
@@ -10,5 +16,6 @@
         public ICollection<Tag> Tags { get; set; }
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
+        public PriorityLevel Priority { get; set; }
     }
 }
