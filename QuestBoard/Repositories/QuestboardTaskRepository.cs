@@ -34,7 +34,7 @@ namespace QuestBoard.Repositories
 
         public async Task<IEnumerable<JobTask>> GetAllAsync()
         {
-            return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).ToListAsync();
+            return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).ToListAsync();
         }
 
         public async Task<JobTask?> GetAsync(Guid id)

@@ -1,4 +1,4 @@
-﻿@model List<QuestBoard.Models.Domain.JobTask>
+﻿@model List<QuestBoard.Models.ViewModes.TaskOverview>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -41,7 +41,12 @@
                             </div>
                         </td>
                         <td>Worker 1</td>
-                        <td>X/X</td>
+                        <td>
+                            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success " style="width: @JobTask.progress%">@JobTask.progress%</div>
+                                <!--adde diese klassen zur progress-bar: progress-bar-striped progress-bar-animated-->
+                            </div>
+                        </td>
 
                         <td>@JobTask.Priority</td>
 

@@ -2,6 +2,9 @@
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
+using System.Threading.Tasks;
+using System;
+using System.Diagnostics;
 
 namespace QuestBoard.Controllers
 {
@@ -65,7 +68,69 @@ namespace QuestBoard.Controllers
         public async Task<IActionResult> Overview()
         {
             var TaskJobs = await questboardTaskRepository.GetAllAsync();
-            return View(TaskJobs);
+
+            List<TaskOverview> TaskOverviews = new List<TaskOverview>();
+
+            foreach (var Tasks in TaskJobs)
+            {
+                float totalSubTasks = 0; 
+                float SubtasksCompleted = 0;
+                float percentage = 0;
+
+                if (Tasks.Subtasks != null)
+                {
+                    totalSubTasks =  Tasks.Subtasks.Count;
+                    foreach (var subtask in Tasks.Subtasks)
+                    {
+                        if (subtask.IsCompleted)
+                        {
+                            SubtasksCompleted++;
+                        }
+                    }
+
+                    if(totalSubTasks > 0)
+                    {
+                        percentage = SubtasksCompleted / totalSubTasks;
+                        percentage = (float)Math.Round(percentage, 2);
+                        percentage *= 100;
+                    }
+                    
+                    
+                }
+                
+
+                TaskOverviews.Add(new TaskOverview
+                {
+                    Id = Tasks.Id,
+                    Name = Tasks.Name,
+                    Description = Tasks.Description,
+                    Type = Tasks.Type,
+                    Tags = Tasks.Tags,
+                    Priority= Tasks.Priority,
+                    progress = percentage
+                });
+            }
+
+/*
+            foreach (var Tasks in TaskJobs)
+            {
+                var totalSubTasks = Tasks.Subtasks.Count;
+                var SubtasksCompleted = 0;
+                var percentage = 0;
+
+                foreach(var subtask in Tasks.Subtasks)
+                {
+                    if(subtask.IsCompleted)
+                    {
+                        SubtasksCompleted++;
+                    }
+                }
+                percentage = SubtasksCompleted / totalSubTasks;
+            }
+
+            */
+
+            return View(TaskOverviews);
         }
 
         [HttpGet]
