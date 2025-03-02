@@ -5,7 +5,7 @@ namespace QuestBoard.Data
 {
     public class QuestboardDbContext : DbContext
     {
-        public QuestboardDbContext(DbContextOptions options) : base(options)
+        public QuestboardDbContext(DbContextOptions<QuestboardDbContext> options) : base(options)
         {
         }
 
