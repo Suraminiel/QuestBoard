@@ -4,6 +4,12 @@ using QuestBoard.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Standard - Settings laden
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true); // Lokale Einstellungen überschreiben
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
