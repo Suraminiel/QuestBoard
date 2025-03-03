@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
 
 namespace QuestBoard.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminTagController : Controller
     {
         private readonly ITagRepository tagRepository;

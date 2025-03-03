@@ -5,9 +5,11 @@ using QuestBoard.Repositories;
 using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuestBoard.Controllers
 {
+    [Authorize(Roles = "User")]
     public class QuestController : Controller
     {
         private readonly ITagRepository tagRepository;

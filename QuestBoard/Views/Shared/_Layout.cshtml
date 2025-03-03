@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,7 +18,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">QuestBoard</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -34,52 +37,77 @@
                             <ul class="dropdown-menu   ">
                                 <li>
                                     <a class="dropdown-item text-light"
-                                       asp-area=""
-                                       asp-controller="Quest"
-                                       asp-action="Add">New Task</a></li>
+                                    asp-area=""
+                                    asp-controller="Quest"
+                                    asp-action="Add">New Task</a></li>
                                 <li>
                                     <a class="dropdown-item text-light"
-                                       asp-area=""
-                                       asp-controller="Quest"
-                                       asp-action="Overview">Overview</a>
+                                    asp-area=""
+                                    asp-controller="Quest"
+                                    asp-action="Overview">Overview</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item text-light"
-                                       asp-area=""
-                                       asp-controller="Quest"
-                                       asp-action="Calender">Calender</a>
+                                    asp-area=""
+                                    asp-controller="Quest"
+                                    asp-action="Calender">Calender</a>
                                 </li>
                             </ul>
                         </li>
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu   ">
+                                    <li>
+                                        <a class="dropdown-item text-light"
+                                        asp-area=""
+                                        asp-controller="AdminTag"
+                                        asp-action="AddTag">New Tag</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-light"
+                                        asp-area=""
+                                        asp-controller="AdminTag"
+                                        asp-action="ListTag">Show Tag</a>
+                                    </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin
-                            </a>
-                            <ul class="dropdown-menu   ">
-                                <li>
-                                    <a class="dropdown-item text-light"
-                                       asp-area=""
-                                       asp-controller="AdminTag"
-                                       asp-action="AddTag">New Tag</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-light"
-                                       asp-area=""
-                                       asp-controller="AdminTag"
-                                       asp-action="ListTag">Show Tag</a>
-                                </li>
-                                
-                            </ul>
-                        </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
-                    <div class="d-flex">
-                        <a class="btn me-3 bg-light text-dark"
-                           asp-area=""
-                           asp-controller="Account"
-                           asp-action="Register">
-                            Register
-                        </a>
+
+                    <div class="d-flex align-items-center">
+                        @if(signInManager.IsSignedIn(User))
+                        {
+                            <div class="me-3 text-light">
+                                @User?.Identity?.Name
+                            </div>
+
+                            <a class="btn me-3 bg-light text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout">
+                                Logout
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn me-3 bg-light text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Login">
+                                Login
+                            </a>
+                            <a class="btn me-3 bg-light text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Register">
+                                Register
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

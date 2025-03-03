@@ -75,7 +75,6 @@ namespace QuestBoard.Data
 
                 if (result.Succeeded)
                 {
-                    // Hier kannst du Rollen oder andere zusätzliche Konfigurationen für den Superadmin durchführen
                     userManager.AddToRoleAsync(superAdminUser, "SuperAdmin").Wait();
                     userManager.AddToRoleAsync(superAdminUser, "Admin").Wait();
                     userManager.AddToRoleAsync(superAdminUser, "User").Wait();
