@@ -37,6 +37,12 @@ namespace QuestBoard.Repositories
             return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).ToListAsync();
         }
 
+        public async Task<IEnumerable<JobTask>> GetAllForThisUserAsync(Guid id)
+        {
+            return await questboardDbContext.JobsAndTasks.Where(jt => jt.Users.Any(u => u.Id == id))
+                .Include(x => x.Tags).Include(st => st.Subtasks).ToListAsync();
+        }
+
         public async Task<JobTask?> GetAsync(Guid id)
         {
             return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);

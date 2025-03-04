@@ -12,6 +12,9 @@ namespace QuestBoard.Data
         public DbSet<JobTask> JobsAndTasks { get; set; }
         public DbSet<Subtask> Subtask { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<AppUser> Users { get; set; }
 
+
+       
     }
 }

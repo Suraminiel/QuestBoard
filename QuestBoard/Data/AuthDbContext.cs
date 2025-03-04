@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using QuestBoard.Models.Domain;
+using QuestBoard.Repositories;
 
 
 namespace QuestBoard.Data
@@ -8,12 +10,12 @@ namespace QuestBoard.Data
     public class AuthDbContext : IdentityDbContext
     {
         private readonly IConfiguration configuration;
-        
+        private readonly IAppUserRepository questboardUserRepository;
 
-        public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration configuration) : base(options)
+        public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration configuration, IAppUserRepository questboardUserRepository) : base(options)
         {
             this.configuration = configuration;
-
+            this.questboardUserRepository = questboardUserRepository;
         }
 
         protected override async void OnModelCreating(ModelBuilder builder)
@@ -78,6 +80,17 @@ namespace QuestBoard.Data
                     userManager.AddToRoleAsync(superAdminUser, "SuperAdmin").Wait();
                     userManager.AddToRoleAsync(superAdminUser, "Admin").Wait();
                     userManager.AddToRoleAsync(superAdminUser, "User").Wait();
+
+                    // Zugriff auf die ID des SuperAdmins
+                    var superAdminId = superAdminUser.Id;
+
+                    var AppUserProfile = new AppUser
+                    {
+                       Id = Guid.Parse(superAdminId),
+                    };
+
+                    // Seed AppUser Table with SuperAdmin ID
+                    questboardUserRepository.AddAsync(AppUserProfile);
                 }
             }
         }

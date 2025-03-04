@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace QuestBoard.Controllers
 {
@@ -14,11 +15,13 @@ namespace QuestBoard.Controllers
     {
         private readonly ITagRepository tagRepository;
         private readonly IQuestboardTaskRepository questboardTaskRepository;
+        private readonly IAppUserRepository appUserRepository;
 
-        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository)
+        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository, IAppUserRepository appUserRepository)
         {
             this.tagRepository = tagRepository;
             this.questboardTaskRepository = questboardTaskRepository;
+            this.appUserRepository = appUserRepository;
         }
         [HttpGet]
         public async Task<IActionResult> Add()
@@ -61,6 +64,30 @@ namespace QuestBoard.Controllers
 
             // Mapping Tags back to DomainModel
             JobTask.Tags = selectedTags;
+
+            // Map Users
+            // Get Task Owner
+
+            var Users = new List<AppUser>();
+            var CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var TaskOwner = await appUserRepository.GetAsync(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+            if(TaskOwner == null)
+            {
+                //TaskOwner.OwnedTasks.Add(JobTask.Id);
+                return View();
+                
+            }
+
+            Users.Add(TaskOwner);
+
+            JobTask.Users = Users;
+
+            var AdminRights =  new List<Guid> ();
+            AdminRights.Add(CurrentUserID);
+            JobTask.AdminUserRights = AdminRights;
+
+            //foreach(var selectedUser in )
+
             await questboardTaskRepository.AddAsync(JobTask);
             
             return RedirectToAction("Add");
@@ -69,7 +96,9 @@ namespace QuestBoard.Controllers
         [HttpGet]
         public async Task<IActionResult> Overview()
         {
-            var TaskJobs = await questboardTaskRepository.GetAllAsync();
+            //var TaskJobs = await questboardTaskRepository.GetAllAsync();
+            var CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var TaskJobs = await questboardTaskRepository.GetAllForThisUserAsync(CurrentUserID);
 
             List<TaskOverview> TaskOverviews = new List<TaskOverview>();
 

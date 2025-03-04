@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
+using QuestBoard.Repositories;
 
 namespace QuestBoard.Controllers
 {
@@ -8,11 +10,13 @@ namespace QuestBoard.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IAppUserRepository appUserRepository;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.appUserRepository = appUserRepository;
         }
         [HttpGet]
         public IActionResult Register()
@@ -33,6 +37,18 @@ namespace QuestBoard.Controllers
 
             if (identityResult.Succeeded)
             {
+
+                // Zugriff auf die ID des SuperAdmins
+                var userId = identityUser.Id;
+
+                var AppUserProfile = new AppUser
+                {
+                    Id = Guid.Parse(userId),
+                };
+
+                // Seed AppUser Table with SuperAdmin ID
+                appUserRepository.AddAsync(AppUserProfile);
+
                 var roleIdentityResult = await userManager.AddToRoleAsync(identityUser, "User");
 
                 if (roleIdentityResult.Succeeded)

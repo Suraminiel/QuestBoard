@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
 @inject SignInManager<IdentityUser> signInManager
 
 <!DOCTYPE html>
@@ -84,6 +85,8 @@
                         {
                             <div class="me-3 text-light">
                                 @User?.Identity?.Name
+                                @User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+
                             </div>
 
                             <a class="btn me-3 bg-light text-dark"
