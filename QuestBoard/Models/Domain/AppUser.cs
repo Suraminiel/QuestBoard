@@ -9,8 +9,8 @@ namespace QuestBoard.Models.Domain
      //   public ICollection<Guid> OwnedTasks { get; set; }
      //   public string UserID { get; set; }
         public ICollection<JobTask> JobTasks { get; set; } // Definiert wer leserechte an einer Aufgabe hat
-       
 
+        public ICollection<Projects> Projects  { get; set; }
 
 
     }

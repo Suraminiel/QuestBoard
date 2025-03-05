@@ -36,6 +36,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IQuestboardTaskRepository, QuestboardTaskRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 var app = builder.Build();
 

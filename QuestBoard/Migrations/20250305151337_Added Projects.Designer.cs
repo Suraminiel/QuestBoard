@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuestBoard.Data;
 
@@ -11,9 +12,11 @@ using QuestBoard.Data;
 namespace QuestBoard.Migrations
 {
     [DbContext(typeof(QuestboardDbContext))]
-    partial class QuestboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250305151337_Added Projects")]
+    partial class AddedProjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,21 +40,6 @@ namespace QuestBoard.Migrations
                     b.ToTable("AppUserJobTask");
                 });
 
-            modelBuilder.Entity("AppUserProjects", b =>
-                {
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProjectsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("AppUserProjects");
-                });
-
             modelBuilder.Entity("JobTaskTag", b =>
                 {
                     b.Property<Guid>("TagsId")
@@ -73,7 +61,12 @@ namespace QuestBoard.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ProjectsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectsId");
 
                     b.ToTable("Users");
                 });
@@ -195,21 +188,6 @@ namespace QuestBoard.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AppUserProjects", b =>
-                {
-                    b.HasOne("QuestBoard.Models.Domain.Projects", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuestBoard.Models.Domain.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("JobTaskTag", b =>
                 {
                     b.HasOne("QuestBoard.Models.Domain.Tag", null)
@@ -225,6 +203,13 @@ namespace QuestBoard.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("QuestBoard.Models.Domain.AppUser", b =>
+                {
+                    b.HasOne("QuestBoard.Models.Domain.Projects", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ProjectsId");
+                });
+
             modelBuilder.Entity("QuestBoard.Models.Domain.Subtask", b =>
                 {
                     b.HasOne("QuestBoard.Models.Domain.JobTask", null)
@@ -235,6 +220,11 @@ namespace QuestBoard.Migrations
             modelBuilder.Entity("QuestBoard.Models.Domain.JobTask", b =>
                 {
                     b.Navigation("Subtasks");
+                });
+
+            modelBuilder.Entity("QuestBoard.Models.Domain.Projects", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

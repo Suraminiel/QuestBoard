@@ -1,0 +1,46 @@
+﻿@model List<QuestBoard.Models.ViewModes.ProjectsOverview>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="py-2 mb-5" id="siteHeader">
+    <div class="container">
+        <h2>Your Projects</h2>
+    </div>
+</div>
+
+<div class="container">
+   @if(Model != null && Model.Any())
+   {
+       <table class="table table-dark">
+           <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Description</th>
+                   <th></th>
+               </tr>
+           </thead>
+           <tbody>
+               @foreach(var project in Model)
+               {
+                   <tr>
+                       <td>@project.Name</td>
+                       <td>@project.Description</td>
+                        <td>
+                            <a asp-area=""
+                               asp-controller="Project"
+                               asp-action="Edit"
+                               asp-route-id="@project.Id">
+                                Open
+                            </a>
+                        </td>
+                   </tr>
+               }
+           </tbody>
+       </table>
+   }
+    
+    <p>List Projects</p>
+</div>

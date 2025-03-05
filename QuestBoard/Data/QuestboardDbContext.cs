@@ -14,7 +14,7 @@ namespace QuestBoard.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<AppUser> Users { get; set; }
 
-
+        public DbSet<Projects> Projects { get; set; }
        
     }
 }
