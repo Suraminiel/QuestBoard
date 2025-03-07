@@ -20,5 +20,9 @@
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
         public PriorityLevel Priority { get; set; }
+
+
+        public Guid ProjectId { get; set; } // Fremdschlüssel
+        public Projects Project { get; set; } // Navigation Property
     }
 }

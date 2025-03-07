@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using QuestBoard.Data;
 
 namespace QuestBoard.Controllers
 {
@@ -16,20 +17,23 @@ namespace QuestBoard.Controllers
         private readonly ITagRepository tagRepository;
         private readonly IQuestboardTaskRepository questboardTaskRepository;
         private readonly IAppUserRepository appUserRepository;
+        private readonly IProjectRepository projectRepository;
 
-        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository, IAppUserRepository appUserRepository)
+        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository, IAppUserRepository appUserRepository, IProjectRepository projectRepository)
         {
             this.tagRepository = tagRepository;
             this.questboardTaskRepository = questboardTaskRepository;
             this.appUserRepository = appUserRepository;
+            this.projectRepository = projectRepository;
         }
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Add(Guid projectId)
         {
             var tag = await tagRepository.GetAllAsync();
             var model = new AddTaskRequest
             {
-                Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString()})
+                Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString()}),
+                projectId = projectId
             };
             return View(model);
         }
@@ -37,6 +41,12 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Add (AddTaskRequest addTaskRequest)
         {
+            var project = await projectRepository.GetAsync(addTaskRequest.projectId);
+
+            if (project == null)
+            {
+                return NotFound("Projekt nicht gefunden.");
+            }
             // Map viewModel to DomainModel
             var JobTask = new JobTask
             {
@@ -47,6 +57,8 @@ namespace QuestBoard.Controllers
                 PublishedDate = addTaskRequest.PublishedDate,
                 Author = addTaskRequest.Author,
                 Priority = addTaskRequest.Priority,
+                ProjectId = addTaskRequest.projectId,
+                Project = project,
             };
 
             // Map Tags from selected Tags

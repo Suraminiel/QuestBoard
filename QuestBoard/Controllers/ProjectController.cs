@@ -5,6 +5,7 @@ using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
 using System.Collections;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace QuestBoard.Controllers
 {
@@ -83,6 +84,65 @@ namespace QuestBoard.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
+            var currentProject = await projectRepository.GetAsync(id);
+            
+            if (currentProject != null)
+            {
+                var editProject = new EditProjectRequest
+                {
+                    Name = currentProject.Name,
+                    Description = currentProject.Description,
+                    Id = currentProject.Id,
+
+                    //Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
+                    TaskOverviews = currentProject.JobTasks.Select(t  => new TaskOverview { 
+                        Priority = t.Priority,
+                        Name = t.Name,
+                        Id = t.Id, 
+                        //AdminUserRights = t.AdminUserRights,
+                        Author = t.Author,
+                        Description = t.Description,
+                       // ProjectId = t.ProjectId,
+                        Type = t.Type,
+                        Tags = t.Tags,
+                        Subtasks = t.Subtasks}).ToList(),
+
+                  
+                };
+
+                foreach (var task in editProject.TaskOverviews)
+                {
+                    float totalSubTasks = 0;
+                    float SubtasksCompleted = 0;
+                    float percentage = 0;
+
+                    if (task.Subtasks != null)
+                    {
+                        totalSubTasks = task.Subtasks.Count;
+                        foreach (var subtask in task.Subtasks)
+                        {
+                            if (subtask.IsCompleted)
+                            {
+                                SubtasksCompleted++;
+                            }
+                        }
+
+                        if (totalSubTasks > 0)
+                        {
+                            percentage = SubtasksCompleted / totalSubTasks;
+                            percentage = (float)Math.Round(percentage, 2);
+                            percentage *= 100;
+                        }
+                    }
+
+                    task.progress = percentage;
+                }
+
+               
+
+
+                return View(editProject);
+            }
             return View();
         }
     }

@@ -12,8 +12,8 @@ using QuestBoard.Data;
 namespace QuestBoard.Migrations
 {
     [DbContext(typeof(QuestboardDbContext))]
-    [Migration("20250305151630_Added NM Relationship between projects and appuser")]
-    partial class AddedNMRelationshipbetweenprojectsandappuser
+    [Migration("20250306182140_Test")]
+    partial class Test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

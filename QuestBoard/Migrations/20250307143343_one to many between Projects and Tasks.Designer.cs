@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuestBoard.Data;
 
@@ -11,9 +12,11 @@ using QuestBoard.Data;
 namespace QuestBoard.Migrations
 {
     [DbContext(typeof(QuestboardDbContext))]
-    partial class QuestboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250307143343_one to many between Projects and Tasks")]
+    partial class onetomanybetweenProjectsandTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

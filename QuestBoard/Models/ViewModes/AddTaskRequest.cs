@@ -19,5 +19,7 @@ namespace QuestBoard.Models.ViewModes
         // Collect Tags
         public string[] SelectedTags { get; set; } = Array.Empty<string>();
 
+        public Guid projectId { get; set; }
+
     }
 }

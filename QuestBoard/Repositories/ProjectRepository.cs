@@ -35,9 +35,15 @@ namespace QuestBoard.Repositories
             return await questboardDbContext.Projects.Where(jt => jt.Users.Any(u => u.Id == id)).ToListAsync();
         }
 
-        public Task<Projects?> GetAsync(Guid id)
+        public async Task<Projects?> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await questboardDbContext.Projects
+                .Include(p => p.JobTasks)
+                 .ThenInclude(jt => jt.Subtasks)
+                .Include(p => p.JobTasks)
+                 .ThenInclude(jt => jt.Tags)
+                .FirstOrDefaultAsync(jt => jt.Id == id);
+            //return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<Projects?> UpdateAsync(Projects jobTask)
