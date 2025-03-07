@@ -187,6 +187,7 @@ namespace QuestBoard.Controllers
                 var model = new EditTaskRequest
                 {
                     Id = taskJob.Id,
+                    ProjectId = taskJob.ProjectId,
                     Name = taskJob.Name,
                     Description = taskJob.Description,
                     Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
@@ -254,7 +255,7 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(EditTaskRequest editTaskRequest)
         {
-            var deletedJobTask = await questboardTaskRepository.DeleteAsync(editTaskRequest.Id);
+            var deletedJobTask = await questboardTaskRepository.DeleteIndividualAsync(editTaskRequest.Id, editTaskRequest.ProjectId);
 
             if (deletedJobTask != null)
             {

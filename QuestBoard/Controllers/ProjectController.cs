@@ -14,11 +14,13 @@ namespace QuestBoard.Controllers
     {
         private readonly IAppUserRepository appUserRepository;
         private readonly IProjectRepository projectRepository;
+        private readonly IQuestboardTaskRepository questboardTaskRepository;
 
-        public ProjectController(IAppUserRepository appUserRepository, IProjectRepository projectRepository)
+        public ProjectController(IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository)
         {
             this.appUserRepository = appUserRepository;
             this.projectRepository = projectRepository;
+            this.questboardTaskRepository = questboardTaskRepository;
         }
         [HttpGet]
         public async Task<IActionResult> List()
@@ -144,6 +146,69 @@ namespace QuestBoard.Controllers
                 return View(editProject);
             }
             return View();
+        }
+
+        public async Task<IActionResult> Delete(EditProjectRequest editProjectRequest)
+        {
+            bool successfullDeletion = true;
+            var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
+
+            if (currentProject != null)
+            {
+                var editProject = new EditProjectRequest
+                {
+                    Name = currentProject.Name,
+                    Description = currentProject.Description,
+                    Id = currentProject.Id,
+
+                    //Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
+                    JobTasks = currentProject.JobTasks.Select(t => new JobTask
+                    {
+                        Priority = t.Priority,
+                        Name = t.Name,
+                        Id = t.Id,
+                        //AdminUserRights = t.AdminUserRights,
+                        Author = t.Author,
+                        Description = t.Description,
+                        // ProjectId = t.ProjectId,
+                        Type = t.Type,
+                        Tags = t.Tags,
+                        Subtasks = t.Subtasks
+                    }).ToList(),
+
+
+                };
+
+               
+
+                foreach (var task in editProject.JobTasks)
+                {
+
+                   var deleteTask = await questboardTaskRepository.DeleteAsync(task.Id);
+                    if (deleteTask == null)
+                    {
+                        successfullDeletion = false;
+                    }
+                }
+            }
+
+            var deletedProject = await projectRepository.DeleteAsync(editProjectRequest.Id);
+
+            if (deletedProject != null && successfullDeletion)
+            {
+                return RedirectToAction("List");
+            }
+
+            return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+            /* var deletedJobTask = await questboardTaskRepository.DeleteAsync(editTaskRequest.Id);
+
+            if (deletedJobTask != null)
+            {
+                // Show success notification
+                return RedirectToAction("Overview");
+            }*/
+
+
         }
     }
 }

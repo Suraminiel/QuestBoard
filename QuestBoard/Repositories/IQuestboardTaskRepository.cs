@@ -11,6 +11,7 @@ namespace QuestBoard.Repositories
         Task<JobTask> AddAsync(JobTask jobTask);
         Task<JobTask?> UpdateAsync(JobTask jobTask, string deletedSubtasks = null);
         Task<JobTask?> DeleteAsync(Guid id);
+        Task<JobTask?> DeleteIndividualAsync(Guid id, Guid projectId);
     }
 }
 

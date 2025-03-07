@@ -32,6 +32,48 @@ namespace QuestBoard.Repositories
             return null;
         }
 
+        public async Task<JobTask?> DeleteIndividualAsync(Guid id, Guid projectId)
+        {
+            var project = await questboardDbContext.Projects
+                .Include(p => p.JobTasks)
+                .ThenInclude(jt => jt.Subtasks)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+
+            if (project != null)
+            {
+                var jobtaskToDelete = project.JobTasks.FirstOrDefault(p => p.Id == id);
+                if (jobtaskToDelete != null)
+                {
+
+                    foreach (var subtask in jobtaskToDelete.Subtasks)
+                    {
+                        questboardDbContext.Subtask.Remove(subtask);
+                    }
+
+                    project.JobTasks.Remove(jobtaskToDelete);
+                    questboardDbContext.JobsAndTasks.Remove(jobtaskToDelete);
+                    await questboardDbContext.SaveChangesAsync();
+                    return jobtaskToDelete;
+                }
+            }
+
+
+            return null ;
+
+
+            /*
+            var existingJobTask = await questboardDbContext.JobsAndTasks.FindAsync(id);
+
+            if (existingJobTask != null)
+            {
+                questboardDbContext.JobsAndTasks.Remove(existingJobTask);
+                await questboardDbContext.SaveChangesAsync();
+                return existingJobTask;
+            }
+            return null;*/
+        }
+
         public async Task<IEnumerable<JobTask>> GetAllAsync()
         {
             return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).ToListAsync();

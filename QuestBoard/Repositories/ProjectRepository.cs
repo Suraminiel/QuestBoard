@@ -20,9 +20,17 @@ namespace QuestBoard.Repositories
             
         }
 
-        public Task<Projects?> DeleteAsync(Guid id)
+        public async Task<Projects?> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var existingProject = await questboardDbContext.Projects.FindAsync(id);
+
+            if (existingProject != null)
+            {
+                questboardDbContext.Projects.Remove(existingProject);
+                await questboardDbContext.SaveChangesAsync();
+                return existingProject;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Projects>> GetAllAsync()
