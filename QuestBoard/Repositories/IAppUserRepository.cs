@@ -6,6 +6,7 @@ namespace QuestBoard.Repositories
     {
         Task<IEnumerable<AppUser>> GetAllAsync();
         Task<AppUser?> GetAsync (Guid id);
+        Task<AppUser?> GetAsync(string name);
         Task<AppUser> AddAsync(AppUser appUser);
         Task<AppUser?> UpdateAsync(AppUser appUser);
         Task<AppUser?> DeleteAsync(Guid id);

@@ -50,13 +50,30 @@ namespace QuestBoard.Repositories
                  .ThenInclude(jt => jt.Subtasks)
                 .Include(p => p.JobTasks)
                  .ThenInclude(jt => jt.Tags)
+                 .Include(p => p.Users)
                 .FirstOrDefaultAsync(jt => jt.Id == id);
             //return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<Projects?> UpdateAsync(Projects jobTask)
+        public async Task<Projects?> UpdateAsync(Projects project)
         {
-            throw new NotImplementedException();
+            var existingProject = await questboardDbContext.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
+            //var existingJobTask = await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == jobTask.Id);
+
+            if (existingProject != null)
+            {
+                existingProject.Name = project.Name;
+                existingProject.Description = project.Description;
+                existingProject.AdminUserRights = project.AdminUserRights;
+                existingProject.Users = project.Users;
+                existingProject.JobTasks = project.JobTasks;
+
+                await questboardDbContext.SaveChangesAsync();
+                return existingProject;
+            }
+
+            return null;
+            
         }
     }
 }

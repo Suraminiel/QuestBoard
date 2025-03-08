@@ -36,6 +36,11 @@ namespace QuestBoard.Repositories
             //return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<AppUser?> GetAsync(string name)
+        {
+            return await questboardDbContext.Users.FirstOrDefaultAsync(x => x.Name == name);
+        }
+
         public Task<AppUser?> UpdateAsync(AppUser appUser)
         {
             throw new NotImplementedException();

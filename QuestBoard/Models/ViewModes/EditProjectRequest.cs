@@ -9,7 +9,10 @@ namespace QuestBoard.Models.ViewModes
         public string Description { get; set; }
 
         public List<TaskOverview> TaskOverviews { get; set; }
-
+        public List<Guid> AdminUserRights { get; set; }
         public ICollection<JobTask> JobTasks { get; set; }
+
+        public ICollection<AppUserViewModel> Users { get; set; }
+        public string InvitedUser { get; set; }
     }
 }

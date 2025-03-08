@@ -87,6 +87,7 @@ namespace QuestBoard.Data
                     var AppUserProfile = new AppUser
                     {
                        Id = Guid.Parse(superAdminId),
+                       Name = superAdminUser.UserName,
                     };
 
                     // Seed AppUser Table with SuperAdmin ID

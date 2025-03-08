@@ -5,6 +5,7 @@ namespace QuestBoard.Models.Domain
     public class AppUser
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
 
      //   public ICollection<Guid> OwnedTasks { get; set; }
      //   public string UserID { get; set; }

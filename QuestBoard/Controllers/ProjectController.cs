@@ -95,7 +95,8 @@ namespace QuestBoard.Controllers
                     Name = currentProject.Name,
                     Description = currentProject.Description,
                     Id = currentProject.Id,
-
+                    //Users = currentProject.Users,
+                    AdminUserRights = currentProject.AdminUserRights.ToList(),
                     //Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
                     TaskOverviews = currentProject.JobTasks.Select(t  => new TaskOverview { 
                         Priority = t.Priority,
@@ -111,6 +112,36 @@ namespace QuestBoard.Controllers
 
                   
                 };
+
+                ICollection<AppUserViewModel> Users = new List<AppUserViewModel>();
+                foreach (var users in currentProject.Users)
+                {
+                    AppUserViewModel usermodel = new AppUserViewModel
+                    {
+                        Id = users.Id,
+                        Name = users.Name,
+
+                        
+
+                    };
+
+                    foreach(var admin in currentProject.AdminUserRights)
+                    {
+                        if (users.Id == admin)
+                        {
+                            usermodel.IsAdminOfSecelectedProject = true;
+                        }
+                        else
+                        {
+                            usermodel.IsAdminOfSecelectedProject=false;
+                        }
+                    }
+
+                    Users.Add(usermodel);
+                    
+                }
+
+                editProject.Users = Users;
 
                 foreach (var task in editProject.TaskOverviews)
                 {
@@ -209,6 +240,32 @@ namespace QuestBoard.Controllers
             }*/
 
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> inviteTeamMember(EditProjectRequest editProjectRequest)
+        {
+            // get current project
+            var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
+
+            // look for invited User in appUserRepository
+            var newUser = await appUserRepository.GetAsync(editProjectRequest.InvitedUser);
+
+            // if possible add invited User to project
+            if (newUser != null && currentProject != null)
+            {
+                currentProject.Users.Add(newUser);
+               var updatedProject = await projectRepository.UpdateAsync(currentProject);
+
+                if (updatedProject != null)
+                {
+                    // insert victory dance
+                }
+            }
+
+            
+
+            return RedirectToAction("Edit", new { id = editProjectRequest.Id });
         }
     }
 }
