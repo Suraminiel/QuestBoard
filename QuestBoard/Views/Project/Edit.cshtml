@@ -43,14 +43,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(var users in Model.Users)
+                            @for(var i = 0; i < Model.Users.Count; i++)
                             {
                                
                                 <tr>
-                                    <td>@users.Name</td>
+                                    <td>@Model.Users[i].Name</td>
                                     <td>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" asp-for="@users.IsAdminOfSecelectedProject">                         
+                                            <input type="hidden" name="Users[i].IsAdminOfSelectedProject" value="false" />
+                                            <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" asp-for="Users[i].IsAdminOfSelectedProject">
+
+                                            
+                                            <input type="hidden" name="Users[@i].Id" value="@Model.Users[i].Id" />
+                                           
                                         </div>
                                         
                                      </td>

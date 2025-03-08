@@ -12,7 +12,7 @@ namespace QuestBoard.Models.ViewModes
         public List<Guid> AdminUserRights { get; set; }
         public ICollection<JobTask> JobTasks { get; set; }
 
-        public ICollection<AppUserViewModel> Users { get; set; }
+        public List<AppUserViewModel> Users { get; set; }
         public string InvitedUser { get; set; }
     }
 }

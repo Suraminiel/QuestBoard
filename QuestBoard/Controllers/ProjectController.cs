@@ -125,23 +125,23 @@ namespace QuestBoard.Controllers
 
                     };
 
-                    foreach(var admin in currentProject.AdminUserRights)
+                    
+                    if(currentProject.AdminUserRights.Contains(users.Id))
                     {
-                        if (users.Id == admin)
-                        {
-                            usermodel.IsAdminOfSecelectedProject = true;
-                        }
-                        else
-                        {
-                            usermodel.IsAdminOfSecelectedProject=false;
-                        }
+                        usermodel.IsAdminOfSelectedProject = true;
                     }
+                    else
+                    {
+                        usermodel.IsAdminOfSelectedProject = false;
+                    }
+
+                    
 
                     Users.Add(usermodel);
                     
                 }
 
-                editProject.Users = Users;
+                editProject.Users = Users.ToList();
 
                 foreach (var task in editProject.TaskOverviews)
                 {
@@ -177,6 +177,47 @@ namespace QuestBoard.Controllers
                 return View(editProject);
             }
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditProjectRequest editProjectRequest)
+        {
+
+            // get current project from database
+            var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
+           
+            // loop through editprojectusers and add Id with adminrights to currenproject.AdminUserRights
+            foreach (var users in editProjectRequest.Users)
+            {
+                if(users.IsAdminOfSelectedProject)
+                {
+                    if(!currentProject.AdminUserRights.Contains(users.Id))
+                    {
+                        currentProject.AdminUserRights.Add(users.Id);
+                    }
+                }
+                else
+                {
+                    if (currentProject.AdminUserRights.Contains(users.Id))
+                    {
+                        currentProject.AdminUserRights.Remove(users.Id);
+                    }
+                }
+            }
+
+            // save current project to database
+            var saveCurrentProject = await projectRepository.UpdateAsync(currentProject);
+
+            if (saveCurrentProject != null)
+            {
+                return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+            }
+             return new ContentResult
+            {
+                Content = "Something went wrong. Please try again later.",
+                ContentType = "text/plain",
+                StatusCode = 500
+            }; ;
         }
 
         public async Task<IActionResult> Delete(EditProjectRequest editProjectRequest)

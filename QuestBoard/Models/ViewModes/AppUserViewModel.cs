@@ -13,6 +13,6 @@ namespace QuestBoard.Models.ViewModes
 
         public ICollection<Projects> Projects { get; set; }
 
-        public bool IsAdminOfSecelectedProject { get; set; }
+        public bool IsAdminOfSelectedProject { get; set; }
     }
 }
