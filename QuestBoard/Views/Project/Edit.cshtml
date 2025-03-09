@@ -14,11 +14,11 @@
     </div>
 </div>
 
-<div class="container mb-3">
+<div class="container mb-3 " >
     <div>
         @if(Model != null)
         {
-            <form method="post">
+            <form method="post" >
                 <div class="mb-3">
                     <label class="form-label">Name</label>
                     <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" />
@@ -49,7 +49,7 @@
                                 <tr>
                                     <td>@Model.Users[i].Name</td>
                                     <td>
-                                        <div class="form-check">
+                                        <div class="form-check @(!Model.isAdmin ? "admin-disabled" : "")">
                                             <input type="hidden" name="Users[i].IsAdminOfSelectedProject" value="false" />
 
                                             <!--Check wether user is the creator of the project and if so dieable the checkbox-->
@@ -72,11 +72,11 @@
                                     <!--Check wether user is the creator of the project and if so dieable the checkbox-->
                                     @if (Model.Users[i].Id == Model.AdminUserRights[0])
                                     {
-                                        <td><button class="btn btn-danger" disabled type="submit" asp-area="" asp-controller="Project" asp-action="removeTeamMember" asp-route-deleteUserId="@Model.Users[i].Id">X</button></td>
+                                        <td><button class="btn btn-danger @(!Model.isAdmin ? "admin-disabled" : "")" disabled type="submit" asp-area="" asp-controller="Project" asp-action="removeTeamMember" asp-route-deleteUserId="@Model.Users[i].Id">X</button></td>
                                     }
                                     else
                                     {
-                                        <td><button class="btn btn-danger" type="submit" asp-area="" asp-controller="Project" asp-action="removeTeamMember" asp-route-deleteUserId="@Model.Users[i].Id">X</button></td>
+                                        <td><button class="btn btn-danger @(!Model.isAdmin ? "admin-disabled" : "")" type="submit" asp-area="" asp-controller="Project" asp-action="removeTeamMember" asp-route-deleteUserId="@Model.Users[i].Id">X</button></td>
                                     }
                                 </tr>
                                 
@@ -87,7 +87,7 @@
 
                     <label class="form-label">Invite</label>
                     <input type="text" class="form-control bg-dark text-light" id="inviteTeamMembers" asp-for="InvitedUser" />
-                    <button class="btn btn-success mt-3 mb-3" type="submit" asp-area="" asp-controller="Project" asp-action="inviteTeamMember">Invite</button>
+                    <button class="btn btn-success mt-3 mb-3 @(!Model.isAdmin ? "admin-disabled" : "")" type="submit" asp-area="" asp-controller="Project" asp-action="inviteTeamMember">Invite</button>
              </div>
 
 
@@ -101,7 +101,7 @@
                    
                     <th>Name</th>
                     <th>Tags</th>
-                    <th>Assigned Workers</th>
+                    <th>Team</th>
                     <th>Progress</th>
                     <th>Priority</th>
                     <th></th>
@@ -147,7 +147,7 @@
 
             </table>
 
-            <a class="btn me-3 bg-success text-dark"
+                <a class="btn me-3 bg-success text-dark @(!Model.isAdmin ? "admin-disabled" : "")"
                asp-area=""
                asp-route-projectId ="@Model.Id"
                asp-controller="Quest"
@@ -170,8 +170,8 @@
 
             
             <div class="mt-3" >
-                <button class="btn btn-success" type="submit">Save</button>
-                <button type="submit" class="btn btn-danger ms-2"
+                    <button class="btn btn-success @(!Model.isAdmin ? "admin-disabled" : "")" type="submit">Save</button>
+                    <button type="submit" class="btn btn-danger ms-2 @(!Model.isAdmin ? "admin-disabled" : "")"
                         asp-area=""
                         asp-controller="Project"
                         asp-action="Delete">

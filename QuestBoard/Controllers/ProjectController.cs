@@ -177,6 +177,12 @@ namespace QuestBoard.Controllers
                 {
                     return Forbid();
                 }
+
+                // Prüfe ob der aKtuelle User Projekt Admin ist
+                if(currentProject.AdminUserRights.Contains(Guid.Parse(currentUserId)))
+                {
+                    editProject.isAdmin = true;
+                }
                
 
 

@@ -57,3 +57,8 @@ footer {
     border: 1px solid grey;
     border-radius: 10px;
 }
+
+.admin-disabled {
+    pointer-events: none; /* Verhindert Klicks */
+    opacity: 0.5; /* Macht alles ausgegraut */
+}

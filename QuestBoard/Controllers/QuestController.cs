@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using QuestBoard.Data;
+using System.Linq;
 
 namespace QuestBoard.Controllers
 {
@@ -180,38 +181,51 @@ namespace QuestBoard.Controllers
         public async Task<IActionResult>Edit(Guid Id)
         {
             var taskJob = await questboardTaskRepository.GetAsync(Id);
+           
             var tagsDomainModel = await tagRepository.GetAllAsync();
 
-            if (taskJob != null)
+            if (taskJob != null )
             {
-                var model = new EditTaskRequest
+                var currentProject = await projectRepository.GetAsync(taskJob.ProjectId);
+
+                if (currentProject != null)
                 {
-                    Id = taskJob.Id,
-                    ProjectId = taskJob.ProjectId,
-                    Name = taskJob.Name,
-                    Description = taskJob.Description,
-                    Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
-                    Type = taskJob.Type,
-                    PublishedDate = taskJob.PublishedDate,
-                    Author = taskJob.Author,
-                    Priority = taskJob.Priority,
-                    Tags = tagsDomainModel.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+
+                    var model = new EditTaskRequest
                     {
-                        Text = x.Name,
-                        Value = x.Id.ToString()
-                    }),
-                    SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray()
+                        Id = taskJob.Id,
+                        ProjectId = taskJob.ProjectId,
+                        Name = taskJob.Name,
+                        Description = taskJob.Description,
+                        Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
+                        Type = taskJob.Type,
+                        PublishedDate = taskJob.PublishedDate,
+                        Author = taskJob.Author,
+                        Priority = taskJob.Priority,
+                        Tags = tagsDomainModel.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                        {
+                            Text = x.Name,
+                            Value = x.Id.ToString()
+                        }),
+                        SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray()
 
-                };
+                    };
 
-                // Prüfen, ob der aktuelle User Teil der Task ist
-                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                if (!taskJob.Users.Any(u => u.Id.ToString() == currentUserId))
-                {
-                    return Forbid();
+                    // Prüfen, ob der aktuelle User Teil der Task ist oder projektadmin ist
+
+
+                    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+                    
+
+                    if (!taskJob.Users.Any(u => u.Id.ToString() == currentUserId) &&  !currentProject.AdminUserRights.Contains(Guid.Parse(currentUserId)))
+                    {
+                        return Forbid();
+                    }
+
+                    return View(model);
                 }
-
-                return View(model);
             }
 
             return View(null);

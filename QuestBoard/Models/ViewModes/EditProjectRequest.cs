@@ -13,6 +13,8 @@ namespace QuestBoard.Models.ViewModes
         public ICollection<JobTask> JobTasks { get; set; }
 
         public List<AppUserViewModel> Users { get; set; }
+
+        public bool isAdmin { get; set; } = false; // Teilt View mit, ob der aktuelle User ein Projektadmin ist
         public string InvitedUser { get; set; }
     }
 }
