@@ -203,6 +203,14 @@ namespace QuestBoard.Controllers
                     SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray()
 
                 };
+
+                // Prüfen, ob der aktuelle User Teil der Task ist
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                if (!taskJob.Users.Any(u => u.Id.ToString() == currentUserId))
+                {
+                    return Forbid();
+                }
+
                 return View(model);
             }
 

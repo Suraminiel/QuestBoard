@@ -171,6 +171,12 @@ namespace QuestBoard.Controllers
                     task.progress = percentage;
                 }
 
+                // Prüfen, ob der aktuelle User Teil des Projekts ist
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                if (!currentProject.Users.Any(u => u.Id.ToString() == currentUserId))
+                {
+                    return Forbid();
+                }
                
 
 
@@ -185,40 +191,51 @@ namespace QuestBoard.Controllers
 
             // get current project from database
             var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
-           
-            // loop through editprojectusers and add Id with adminrights to currenproject.AdminUserRights
-            foreach (var users in editProjectRequest.Users)
+
+            if (currentProject != null)
             {
-                if(users.IsAdminOfSelectedProject)
+
+                currentProject.Name = editProjectRequest.Name;
+                currentProject.Description = editProjectRequest.Description;
+
+                // loop through editprojectusers and add Id with adminrights to currenproject.AdminUserRights
+                foreach (var users in editProjectRequest.Users)
                 {
-                    if(!currentProject.AdminUserRights.Contains(users.Id))
+                    if (users.IsAdminOfSelectedProject)
                     {
-                        currentProject.AdminUserRights.Add(users.Id);
+                        if (!currentProject.AdminUserRights.Contains(users.Id))
+                        {
+                            currentProject.AdminUserRights.Add(users.Id);
+                        }
+                    }
+                    else
+                    {
+                        if (currentProject.AdminUserRights.Contains(users.Id) && 
+                            currentProject.AdminUserRights.ToList().IndexOf(users.Id) != 0)
+                        {
+                            currentProject.AdminUserRights.Remove(users.Id);
+                        }
                     }
                 }
-                else
+
+                // save current project to database
+                var saveCurrentProject = await projectRepository.UpdateAsync(currentProject);
+
+                if (saveCurrentProject != null)
                 {
-                    if (currentProject.AdminUserRights.Contains(users.Id))
-                    {
-                        currentProject.AdminUserRights.Remove(users.Id);
-                    }
+                    return RedirectToAction("Edit", new { id = editProjectRequest.Id });
                 }
-            }
 
-            // save current project to database
-            var saveCurrentProject = await projectRepository.UpdateAsync(currentProject);
-
-            if (saveCurrentProject != null)
-            {
-                return RedirectToAction("Edit", new { id = editProjectRequest.Id });
             }
              return new ContentResult
             {
                 Content = "Something went wrong. Please try again later.",
                 ContentType = "text/plain",
                 StatusCode = 500
-            }; ;
+            }; 
         }
+
+        
 
         public async Task<IActionResult> Delete(EditProjectRequest editProjectRequest)
         {
@@ -305,6 +322,33 @@ namespace QuestBoard.Controllers
             }
 
             
+
+            return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> removeTeamMember(EditProjectRequest editProjectRequest, Guid deleteUserId)
+        {
+            // get current project from database
+            var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
+            var toBeDeletedUser = await appUserRepository.GetAsync(deleteUserId);
+
+            if (currentProject != null && toBeDeletedUser != null)
+            {
+               
+                if (currentProject.Users.Contains(toBeDeletedUser) && currentProject.AdminUserRights.ToList().IndexOf(toBeDeletedUser.Id) != 0)
+                {
+                    currentProject.Users.Remove(toBeDeletedUser);
+
+                    var updatedProject = await projectRepository.UpdateAsync(currentProject);
+
+                    if (updatedProject != null)
+                    {
+                        // insert victory dance
+                    }
+
+                }
+            }
 
             return RedirectToAction("Edit", new { id = editProjectRequest.Id });
         }

@@ -87,7 +87,7 @@ namespace QuestBoard.Repositories
 
         public async Task<JobTask?> GetAsync(Guid id)
         {
-            return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
+            return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).Include(u => u.Users).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<JobTask?> UpdateAsync(JobTask jobTask, string deletedSubtasks)
