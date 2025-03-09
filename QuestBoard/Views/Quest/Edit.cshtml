@@ -60,6 +60,14 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label ">Team</label>
+                <select class="form-select bg-dark text-light"
+                        asp-items="@Model.Users"
+                        asp-for="SelectedUsers">
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Type</label>
                 <input type="text" class="form-control bg-dark text-light" id="type" asp-for="Type" />
             </div>

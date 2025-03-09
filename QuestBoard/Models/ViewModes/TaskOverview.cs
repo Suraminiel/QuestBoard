@@ -11,6 +11,7 @@ namespace QuestBoard.Models.ViewModes
         public List<Subtask> Subtasks { get; set; }
         public float progress { get; set; }
         public ICollection<Tag> Tags { get; set; }
+        public ICollection<AppUser> Users { get; set; }
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
         public PriorityLevel Priority { get; set; }

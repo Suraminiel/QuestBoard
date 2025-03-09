@@ -92,7 +92,7 @@ namespace QuestBoard.Repositories
 
         public async Task<JobTask?> UpdateAsync(JobTask jobTask, string deletedSubtasks)
         {
-            var existingJobTask = await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == jobTask.Id);
+            var existingJobTask = await questboardDbContext.JobsAndTasks.Include(u => u.Users).Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == jobTask.Id);
 
             // delete subtasks that where deleted by the user
             if (!string.IsNullOrEmpty(deletedSubtasks))
@@ -118,6 +118,7 @@ namespace QuestBoard.Repositories
                 existingJobTask.Author = jobTask.Author;
                 existingJobTask.Priority = jobTask.Priority;
                 existingJobTask.Tags = jobTask.Tags;
+                existingJobTask.Users = jobTask.Users;
 
                 foreach (var subtask in jobTask.Subtasks)
                 {

@@ -108,6 +108,7 @@ namespace QuestBoard.Controllers
                        // ProjectId = t.ProjectId,
                         Type = t.Type,
                         Tags = t.Tags,
+                        Users = t.Users,
                         Subtasks = t.Subtasks}).ToList(),
 
                   

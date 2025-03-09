@@ -16,8 +16,13 @@ namespace QuestBoard.Models.ViewModes
         public PriorityLevel Priority { get; set; }
         //Display tags
         public IEnumerable<SelectListItem> Tags { get; set; }
+
         // Collect Tags
         public string[] SelectedTags { get; set; } = Array.Empty<string>();
+
+
+        public IEnumerable<SelectListItem> Users { get; set; }
+        public string[] SelectedUsers { get; set; } = Array.Empty<string>();
 
         public Guid ProjectId { get; set; }
     }

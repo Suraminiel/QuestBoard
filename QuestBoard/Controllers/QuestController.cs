@@ -184,7 +184,7 @@ namespace QuestBoard.Controllers
            
             var tagsDomainModel = await tagRepository.GetAllAsync();
 
-            if (taskJob != null )
+            if (taskJob != null && tagsDomainModel != null)
             {
                 var currentProject = await projectRepository.GetAsync(taskJob.ProjectId);
 
@@ -207,7 +207,17 @@ namespace QuestBoard.Controllers
                             Text = x.Name,
                             Value = x.Id.ToString()
                         }),
-                        SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray()
+                        SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray(),
+                      
+                        Users = currentProject.Users.ToList().Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                        {
+                            Text = x.Name,
+                            Value = x.Id.ToString()
+                        }),
+                        SelectedUsers = taskJob.Users.Select(x => x.Id.ToString()).ToArray(),
+
+
+
 
                     };
 
@@ -262,6 +272,22 @@ namespace QuestBoard.Controllers
             }
 
             JobTaskDomainModel.Tags = selectedTags;
+
+            var selectedUsers = new List<AppUser>();
+            foreach (var selectedUser in editTaskRequest.SelectedUsers)
+            {
+                if (Guid.TryParse(selectedUser, out var user))
+                {
+                    var foundUser = await appUserRepository.GetAsync(user);
+
+                    if (foundUser != null)
+                    {
+                        selectedUsers.Add(foundUser);
+                    }
+                }
+            }
+
+            JobTaskDomainModel.Users = selectedUsers;
 
             // Submit Info to repositiroy
             var updatedJobTask = await questboardTaskRepository.UpdateAsync(JobTaskDomainModel, editTaskRequest.DeletedSubtaskIds);
