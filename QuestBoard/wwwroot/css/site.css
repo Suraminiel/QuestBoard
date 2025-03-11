@@ -19,7 +19,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    
+    background: #0d1117;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -31,9 +31,9 @@ body {
   text-align: start;
 }
 
-.navbar  {
+.navbar {
     border-bottom: 1px solid grey;
-    background-color: #1b1d1f;
+    background-color: #010409;
 }
 
 footer {
@@ -61,4 +61,87 @@ footer {
 .admin-disabled {
     pointer-events: none; /* Verhindert Klicks */
     opacity: 0.5; /* Macht alles ausgegraut */
+}
+
+
+/*####################### StatusPageLayout #######################*/
+
+.statusPageContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    height: 100vh;
+    padding: 20px;
+    height: auto; /* Höhe passt sich dem Inhalt an */
+   
+}
+
+.statusPageSidebar {
+    background: #0d1117;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+   
+
+}
+
+.statusPageHeader {
+    grid-column: span 2;
+   /* background: #151b23;*/
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+    .statusPageHeader h1 {
+        margin-bottom: 10px;
+    }
+
+.statusPageSidebar, .main {
+   
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table {
+    background-color: #0d1117;
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .styled-table th, .styled-table td {
+        border: 1px solid grey; /* Setzt einen dünnen Rand für jede Zelle */
+        padding: 8px; /* Innenabstand in den Zellen */
+        text-align: left; /* Textausrichtung */
+        border-left: none; /* Entfernt vertikale Ränder (links) */
+        border-right: none;
+    }
+
+.rounded-box {
+    border: 1px solid grey; /* Beispiel für die Farbe des Rahmens */
+    border-radius: 10px; /* Rundet die Ecken */
+    padding: 20px;
+}
+
+.custom-link {
+    text-decoration: none; /* Entfernt die Unterstreichung standardmäßig */
+    color: #007bff; /* Setzt die Standard-Schriftfarbe */
+}
+
+    .custom-link:hover {
+        text-decoration: underline; /* Fügt beim Hover die Unterstreichung hinzu */
+        color: #0056b3; /* Optional: Ändert die Farbe beim Hover */
+    }
+
+
+/* Klasse für das unsichtbare Inputfeld */
+.hidden {
+    display: none;
+}
+
+.editing {
+    display: block;
 }
