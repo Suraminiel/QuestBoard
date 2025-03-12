@@ -4,90 +4,104 @@
 *@
 @{
 }
-
-<div class="py-2 mb-5" id="siteHeader">
-    <div class="container">
-        <h2>Task Status</h2>
-    </div>
-</div>
-
-<div class="container">
-    @if(Model != null)
+<form method="post">
+     @if(Model != null)
     {
-        <form method="post">
-            <div class="mb-3">
-                <label class="form-label">Id</label>
-                <input type="text" class="form-control bg-dark text-light" id="id" asp-for="Id" readonly />
-                <input type="hidden" class="form-control" id=" projectId" asp-for="ProjectId" />
+        <div class="py-2 mb-2 siteHeader">
+            <div class="container">
+                <h2>Task: @Model.Name</h2>
+            </div>
+        </div>
+                <a class="btn btn-secondary" asp-area=""
+                    asp-controller="Project"
+                    asp-action="Edit"
+                    asp-route-id ="@Model.ProjectId">
+                    Back
+                </a>
+<div class="">
+
+    <div class="container statusPageContainer ">
+   
+     
+            <div class="statusPageHeader">
+                <div class="mb-3">
+                        <label hidden class="form-label">Id</label>
+                        <input type="text" hidden class="form-control bg-dark text-light" id="id" asp-for="Id" readonly />
+                    <input type="hidden" class="form-control" id=" projectId" asp-for="ProjectId" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" class="form-control bg-dark text-light" id="description" asp-for="Description" />
+                </div>
+            </div>
+            <div class="statusPageSidebar">
+                    <div class="mb-3">
+                        <label class="form-label ">Tags</label>
+                        <select class="form-select Task_Widget "
+                                asp-items="@Model.Tags"
+                                asp-for="SelectedTags">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label ">Team</label>
+                        <select class="form-select Task_Widget"
+                                asp-items="@Model.Users"
+                                asp-for="SelectedUsers">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Deadline</label>
+                        <input type="date" class="form-control bg-dark text-light" id="type" asp-for="Deadline" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control bg-dark text-light" id="publishedDate" asp-for="PublishedDate" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Author</label>
+                        <input type="text" class="form-control bg-dark text-light" id="author" asp-for="Author" />
+                    </div>
+                    <div class="form-group ">
+                        <label for="Priority">Priority</label>
+                        <select name="Priority" class="form-control bg-dark text-light" asp-for="Priority">
+                            <option  value="Low">Low</option>
+                            <option  value="Medium">Medium</option>
+                            <option  value="High">High</option>
+                        </select>
+                    </div>
+
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" readonly />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <input type="text" class="form-control bg-dark text-light" id="description" asp-for="Description" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Subtasks</label>
+            <div class="mb-3 main rounded-box">
+                <h2 class="mb-3" >Subtasks</h2>
                 <input hidden id="deletedSubtasks" name="DeletedSubtaskIds"  />
                 <div id="subtask-container">
                 @for(var i = 0; i < Model.Subtasks.Count; i++)
                 {
                         <div class="mb-2" data-subtask-id="@Model.Subtasks[i].Id">
                             <input type="hidden" name="Subtasks[@i].Id" value="@Model.Subtasks[i].Id" />
-                            <input type="text" name="Subtasks[@i].Name" class="form-control" value="@Model.Subtasks[i].Name" />
+                                <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control " value="@Model.Subtasks[i].Name" />
                             <input class="form-check-input" type="checkbox" id="visible" asp-for="Subtasks[i].IsCompleted">
                             <label class="form-check-label">
                                 Is Completed?
                             </label>
-                            <button type="button" class="btn btn-danger btn-sm remove-subtask mt-3">X</button>
+                                <button type="button" class="btn btn-success btn-sm remove-subtask mt-3">X</button>
                         </div>
                 }
                 </div>
-                <button type="button" class="btn btn-secondary mb-3" id="add-subtask">Add Subtask</button>
+                <button type="button" class="btn btn-success mb-3" id="add-subtask">Add Subtask</button>
             </div>
             
-            <div class="mb-3">
-                <label class="form-label ">Tags</label>
-                <select class="form-select bg-dark text-light"
-                        asp-items="@Model.Tags"
-                        asp-for="SelectedTags">
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label ">Team</label>
-                <select class="form-select bg-dark text-light"
-                        asp-items="@Model.Users"
-                        asp-for="SelectedUsers">
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Type</label>
-                <input type="text" class="form-control bg-dark text-light" id="type" asp-for="Type" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Date</label>
-                <input type="date" class="form-control bg-dark text-light" id="publishedDate" asp-for="PublishedDate" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Author</label>
-                <input type="text" class="form-control bg-dark text-light" id="author" asp-for="Author" />
-            </div>
-            <div class="form-group ">
-                <label for="Priority">Priority</label>
-                <select name="Priority" class="form-control" asp-for="Priority">
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-            </div>
+           
 
 
 
@@ -101,16 +115,17 @@
                 </button>
             </div>
 
-        </form>
+       
+   
+</div>
+</div>
+
     }
     else
     {
         <p>nothing found</p>
     }
-
-    
-</div>
-
+ </form>
 @section Scripts {
     <script>
             document.getElementById("add-subtask").addEventListener("click", function() {
@@ -119,10 +134,10 @@
             let index = container.children.length;
             let subtaskHtml = `
                 <div class="mb-2">
-                    <input type="text" name="Subtasks[${index}].Name" class="form-control" placeholder="Subtask Name" />
+                    <input type="text" style="background:  #0d1117; color: white;" name="Subtasks[${index}].Name" class="form-control" placeholder="Subtask Name" />
                     <input class="form-check-input" type="checkbox" name="Subtasks[${index}].IsCompleted" value="true">
                             <label class="form-check-label">Is Completed?</label>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">X</button>
+                    <button type="button" class="btn btn-success btn-sm" onclick="this.parentElement.remove()">X</button>
                 </div>
             `;
             container.insertAdjacentHTML("beforeend", subtaskHtml);

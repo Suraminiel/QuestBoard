@@ -4,7 +4,8 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
+        public string? shortDescription { get; set; }
 
         public List<Guid> AdminUserRights { get; set; }
         public ICollection<AppUser> Users { get; set; }  // aktuell gibt es eine many to many relationship zwischen AppUser und

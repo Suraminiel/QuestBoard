@@ -113,7 +113,7 @@ namespace QuestBoard.Repositories
                 existingJobTask.Name = jobTask.Name;
                 existingJobTask.Description = jobTask.Description;
                 //existingJobTask.Subtasks = jobTask.Subtasks;
-                existingJobTask.Type = jobTask.Type;
+                existingJobTask.Deadline = jobTask.Deadline;
                 existingJobTask.PublishedDate = jobTask.PublishedDate;
                 existingJobTask.Author = jobTask.Author;
                 existingJobTask.Priority = jobTask.Priority;

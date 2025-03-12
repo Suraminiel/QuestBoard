@@ -74,7 +74,13 @@ footer {
     height: 100vh;
     padding: 20px;
     height: auto; /* Höhe passt sich dem Inhalt an */
-   
+}
+
+@media (max-width: 768px) {
+    .statusPageContainer {
+        display: block;
+        text-align: center;
+    }
 }
 
 .statusPageSidebar {
@@ -82,13 +88,11 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
-   
-
 }
 
 .statusPageHeader {
     grid-column: span 2;
-   /* background: #151b23;*/
+    /* background: #151b23;*/
     color: white;
     padding: 20px;
     border-radius: 8px;
@@ -99,7 +103,6 @@ footer {
     }
 
 .statusPageSidebar, .main {
-   
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -144,4 +147,17 @@ footer {
 
 .editing {
     display: block;
+}
+
+
+.Task_Widget {
+    background: #0d1117;
+    color: grey;
+}
+
+
+/* Wenn der Benutzer eine Option ausgewählt hat */
+select option:checked {
+    background-color: turquoise; /* Beispiel: blaue Hintergrundfarbe */
+    color: black; /* Textfarbe weiß */
 }

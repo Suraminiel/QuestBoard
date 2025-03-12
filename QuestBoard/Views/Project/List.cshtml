@@ -14,7 +14,7 @@
 <div class="container">
    @if(Model != null && Model.Any())
    {
-       <table class="table table-dark">
+        <table class="styled-table">
            <thead>
                <tr>
                    <th>Name</th>
@@ -27,7 +27,7 @@
                {
                    <tr>
                        <td>@project.Name</td>
-                       <td>@project.Description</td>
+                       <td>@project.shortDescription</td>
                         <td>
                             <a asp-area=""
                                asp-controller="Project"

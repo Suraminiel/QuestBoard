@@ -54,7 +54,7 @@ namespace QuestBoard.Controllers
                 Name = addTaskRequest.Name,
                 Description = addTaskRequest.Description,
                 Subtasks = addTaskRequest.Subtasks.Select(s => new Subtask {Name = s.Name }).ToList(),
-                Type = addTaskRequest.Type,
+                Deadline = addTaskRequest.Deadline,
                 PublishedDate = addTaskRequest.PublishedDate,
                 Author = addTaskRequest.Author,
                 Priority = addTaskRequest.Priority,
@@ -103,7 +103,7 @@ namespace QuestBoard.Controllers
 
             await questboardTaskRepository.AddAsync(JobTask);
             
-            return RedirectToAction("Add");
+            return RedirectToAction("Edit","Project", new {id = project.Id});     
         }
 
         [HttpGet]
@@ -148,7 +148,7 @@ namespace QuestBoard.Controllers
                     Id = Tasks.Id,
                     Name = Tasks.Name,
                     Description = Tasks.Description,
-                    Type = Tasks.Type,
+                    Deadline = Tasks.Deadline,
                     Tags = Tasks.Tags,
                     Priority= Tasks.Priority,
                     progress = percentage
@@ -198,7 +198,7 @@ namespace QuestBoard.Controllers
                         Name = taskJob.Name,
                         Description = taskJob.Description,
                         Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
-                        Type = taskJob.Type,
+                        Deadline = taskJob.Deadline,
                         PublishedDate = taskJob.PublishedDate,
                         Author = taskJob.Author,
                         Priority = taskJob.Priority,
@@ -250,7 +250,7 @@ namespace QuestBoard.Controllers
                 Name = editTaskRequest.Name,
                 Description = editTaskRequest.Description,
                 Subtasks = editTaskRequest.Subtasks != null ? editTaskRequest.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList() : new List<Subtask>(),
-                Type = editTaskRequest.Type,
+                Deadline = editTaskRequest.Deadline,
                 PublishedDate = editTaskRequest.PublishedDate,
                 Author = editTaskRequest.Author,
                 Priority = editTaskRequest.Priority,
@@ -304,16 +304,20 @@ namespace QuestBoard.Controllers
         public async Task<IActionResult> Delete(EditTaskRequest editTaskRequest)
         {
             var deletedJobTask = await questboardTaskRepository.DeleteIndividualAsync(editTaskRequest.Id, editTaskRequest.ProjectId);
+            var currentProject = await projectRepository.GetAsync(editTaskRequest.ProjectId);
 
-            if (deletedJobTask != null)
+            if (currentProject != null)
             {
-                // Show success notification
-                return RedirectToAction("Overview");
-            }
+                if (deletedJobTask != null)
+                {
+                    // Show success notification
+                    return RedirectToAction("Edit", "Project", new { id = currentProject.Id });
+                }
 
+               
+            }
             return RedirectToAction("Edit", new { id = editTaskRequest.Id });
         }
-
             [HttpGet]
         public async Task<IActionResult> Calender()
         {

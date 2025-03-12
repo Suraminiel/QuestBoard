@@ -65,7 +65,7 @@ namespace QuestBoard.Repositories
             if (existingProject != null)
             {
                 existingProject.Name = project.Name;
-                existingProject.Description = project.Description;
+                existingProject.shortDescription = project.shortDescription;
                 existingProject.AdminUserRights = project.AdminUserRights;
                 existingProject.Users = project.Users;
                 existingProject.JobTasks = project.JobTasks;

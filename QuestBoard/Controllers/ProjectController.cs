@@ -36,7 +36,7 @@ namespace QuestBoard.Controllers
                 {
                     Id = project.Id,
                     Name = project.Name,
-                    Description = project.Description,
+                    shortDescription = project.shortDescription,
                 });
             }
 
@@ -55,7 +55,7 @@ namespace QuestBoard.Controllers
             Projects model = new Projects
             {
                 Name = addProjectRequest.Name,
-                Description = addProjectRequest.Description,
+                shortDescription = addProjectRequest.shortDescription,
             };
 
 
@@ -93,6 +93,7 @@ namespace QuestBoard.Controllers
                 var editProject = new EditProjectRequest
                 {
                     Name = currentProject.Name,
+                    shortDescription = currentProject.shortDescription,
                     Description = currentProject.Description,
                     Id = currentProject.Id,
                     //Users = currentProject.Users,
@@ -106,7 +107,7 @@ namespace QuestBoard.Controllers
                         Author = t.Author,
                         Description = t.Description,
                        // ProjectId = t.ProjectId,
-                        Type = t.Type,
+                        Deadline = t.Deadline,
                         Tags = t.Tags,
                         Users = t.Users,
                         Subtasks = t.Subtasks}).ToList(),
@@ -203,6 +204,7 @@ namespace QuestBoard.Controllers
             {
 
                 currentProject.Name = editProjectRequest.Name;
+                currentProject.shortDescription = editProjectRequest.shortDescription;
                 currentProject.Description = editProjectRequest.Description;
 
                 // loop through editprojectusers and add Id with adminrights to currenproject.AdminUserRights
@@ -254,6 +256,7 @@ namespace QuestBoard.Controllers
                 var editProject = new EditProjectRequest
                 {
                     Name = currentProject.Name,
+                    shortDescription = currentProject.shortDescription,
                     Description = currentProject.Description,
                     Id = currentProject.Id,
 
@@ -267,7 +270,7 @@ namespace QuestBoard.Controllers
                         Author = t.Author,
                         Description = t.Description,
                         // ProjectId = t.ProjectId,
-                        Type = t.Type,
+                        Deadline = t.Deadline,
                         Tags = t.Tags,
                         Subtasks = t.Subtasks
                     }).ToList(),
