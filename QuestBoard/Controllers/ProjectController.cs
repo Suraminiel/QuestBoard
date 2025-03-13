@@ -80,7 +80,7 @@ namespace QuestBoard.Controllers
 
             projectRepository.AddAsync(model);
 
-            return View();
+            return RedirectToAction("List");
         }
 
         [HttpGet]

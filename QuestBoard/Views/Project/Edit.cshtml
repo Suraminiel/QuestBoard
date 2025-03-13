@@ -8,18 +8,38 @@
 
 }
 <form method="post"> 
-<div class="py-2 mb-2 siteHeader" >
+<div class="py-2 mb-2 siteHeader d-flex" >
     <div class="container">
         <h2>@Model.Name</h2>
+            
     </div>
+        
+    <div>
+            <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+               asp-controller="Project"
+               asp-action="List">
+                Back
+            </a>
+    </div>
+
+        <div>
+            <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+               asp-controller="Project"
+               asp-action="List">
+                Discussions
+            </a>
+        </div>
+
+        <div>
+            <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+               asp-controller="Project"
+               asp-action="List">
+                Documents
+            </a>
+        </div>
 </div>
 
-    <a class="btn btn-secondary" asp-area=""
-       asp-controller="Project"
-       asp-action="List"
-       >
-        Back
-    </a>
+   
 
 <div class="container statusPageContainer  mb-3 ">
     
@@ -210,3 +230,12 @@
 </form>
 
 
+@section Scripts {
+    <script>
+        tinymce.init({
+          selector: '#description-input',
+          skin: "oxide-dark",
+          content_css: "dark"
+        });
+    </script>
+}
