@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuestBoard.Data;
+using QuestBoard.Models.Domain;
 using QuestBoard.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,10 +35,16 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10mb
+});
+
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IQuestboardTaskRepository, QuestboardTaskRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IDocumentsRepository, DocumentsRepository>();
 
 var app = builder.Build();
 
@@ -49,6 +57,8 @@ using (var scope = app.Services.CreateScope())
 
     context.SeedData(userManager);
 }
+
+
 
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())

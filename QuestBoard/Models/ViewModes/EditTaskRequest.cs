@@ -25,5 +25,6 @@ namespace QuestBoard.Models.ViewModes
         public string[] SelectedUsers { get; set; } = Array.Empty<string>();
 
         public Guid ProjectId { get; set; }
+        public string ProjectName { get; set; }
     }
 }

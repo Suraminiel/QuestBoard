@@ -365,3 +365,6 @@ FodyWeavers.xsd
 # Ignoriere nur die lokale AppSettings-Datei
 appsettings.Local.json
 appsettings.Development.json
+
+# Ignore uploaded Data
+*UploadedFiles

@@ -215,6 +215,7 @@ namespace QuestBoard.Controllers
                             Value = x.Id.ToString()
                         }),
                         SelectedUsers = taskJob.Users.Select(x => x.Id.ToString()).ToArray(),
+                        ProjectName = currentProject.Name,
 
 
 

@@ -13,5 +13,7 @@
                                                          // zu Projects geändert werden
 
         public ICollection<JobTask> JobTasks { get; set; }
+
+        public ICollection<Documents> Documents { get; set; }
     }
 }

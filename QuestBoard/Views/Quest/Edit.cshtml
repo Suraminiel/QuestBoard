@@ -9,7 +9,7 @@
     {
         <div class="py-2 mb-2 siteHeader d-flex">
             <div class="container">
-                <h2>Task: @Model.Name</h2>
+                <h2>@Model.ProjectName: @Model.Name</h2>
             </div>
 
             <div>
@@ -37,7 +37,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Name</label>
-                    <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" readonly />
+                    <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name"  />
                 </div>
 
                 <div class="mb-3">

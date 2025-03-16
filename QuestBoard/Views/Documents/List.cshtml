@@ -1,0 +1,92 @@
+﻿@model QuestBoard.Models.ViewModes.DocumentViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@if (Model != null)
+{
+
+    <div class="py-2 mb-2 siteHeader d-flex" >
+       <div class="container">
+           <h2>@Model.Project.Name -> Documents</h2>
+        </div>
+
+    <div>
+        <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+           asp-controller="Project"
+           asp-action="Edit"
+           asp-route-id="@Model.ProjectId">
+            Back
+        </a>
+    </div>
+    </div>
+
+    <div class="container statusPageContainer  mb-3 ">
+        
+        <div class="statusPageHeader mb-3">
+            
+
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Upload Date</th>
+                        <th>Uploaded by</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @foreach(var documents in Model.docs)
+                        {
+                          <tr>
+                              <td>
+                            <a asp-area=""
+                               asp-controller="Documents"
+                               asp-action="DownloadFile"
+                               asp-route-fileId="@documents.id"
+                               asp-route-ProjectId="@Model.ProjectId"
+                               class="custom-link">
+                                @documents.name
+                            </a>
+                              </td>
+                              <td>1.1.1900</td>
+                              <td>user one</td>
+                              <td>X</td>
+                          </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="statusPageSidebar ">
+            
+        </div>
+    <form action="/Documents/Upload" method="post" id="uploadForm" enctype="multipart/form-data">
+        <div class="main">
+                <p>Upload documents</p>
+                <input type="file" id="document" class="form-control bg-dark text-light mb-3 "name="document" />
+                <input type="hidden" class="form-control bg-dark text-light mb-3 " name="ProjectId" value="@Model.ProjectId" />
+            <button type="button" id="btn_upload" onclick="checkFileSize()">Upload</button>
+            </div>
+        </form>
+            
+    </div>
+    }
+@section Scripts{
+    <script>
+        function checkFileSize(){
+            const fileInput = document.getElementById("document");
+            const file = fileInput.files[0];
+
+            if(file.size > 10 * 1024 * 1024)
+            {
+                alert ("File size too big");
+                return;
+            }
+
+            document.getElementById("uploadForm").submit();
+        }
+    </script>
+}

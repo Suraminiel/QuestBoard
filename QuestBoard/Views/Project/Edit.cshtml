@@ -32,8 +32,9 @@
 
         <div>
             <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
-               asp-controller="Project"
-               asp-action="List">
+               asp-controller="Documents"
+               asp-action="List"
+               asp-route-projectID="@Model.Id">
                 Documents
             </a>
         </div>
