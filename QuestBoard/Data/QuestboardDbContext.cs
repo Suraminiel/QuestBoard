@@ -16,6 +16,8 @@ namespace QuestBoard.Data
 
         public DbSet<Projects> Projects { get; set; }
         public DbSet<Documents> Documents { get; set; }
+        public DbSet<ForumThread> forumThreads { get; set; }
+        public DbSet<ForumPost> ForumPosts { get; set; }
        
     }
 }

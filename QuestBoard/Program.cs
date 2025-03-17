@@ -45,6 +45,8 @@ builder.Services.AddScoped<IQuestboardTaskRepository, QuestboardTaskRepository>(
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IDocumentsRepository, DocumentsRepository>();
+builder.Services.AddScoped<IForumThreadRepository, ForumThreadRepository>();
+builder.Services.AddScoped<IForumPostRepository, ForumPostRepository>();
 
 var app = builder.Build();
 
