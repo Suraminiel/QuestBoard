@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -15,11 +16,13 @@ namespace QuestBoard.Controllers
     {
         private readonly IProjectRepository projectRepository;
         private readonly IDocumentsRepository documentsRepository;
+        private readonly IAppUserRepository appUserRepository;
 
-        public DocumentsController(IProjectRepository projectRepository, IDocumentsRepository documentsRepository)
+        public DocumentsController(IProjectRepository projectRepository, IDocumentsRepository documentsRepository, IAppUserRepository appUserRepository)
         {
             this.projectRepository = projectRepository;
             this.documentsRepository = documentsRepository;
+            this.appUserRepository = appUserRepository;
         }
 
         [HttpGet]
@@ -29,8 +32,9 @@ namespace QuestBoard.Controllers
             var projectDocuments = await documentsRepository.GetAllOfThisProject(projectID);
             var currentProject = await projectRepository.GetAsync(projectID);
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUser = await appUserRepository.GetAsync(Guid.Parse(currentUserId));
 
-            if (projectDocuments != null && currentProject != null)
+            if (projectDocuments != null && currentProject != null && currentUser != null)
             {
 
                 DocumentViewModel documents = new DocumentViewModel()
@@ -42,14 +46,22 @@ namespace QuestBoard.Controllers
 
                 foreach (var document in projectDocuments)
                 {
+                    // Get uploader name
+                    var uploader = await appUserRepository.GetAsync(document.UserId);
+                    var uploaderName = "failed to retrieve name";
+                    if (uploader != null) uploaderName = uploader.Name;
+
                     documents.docs.Add(new SingleDocumentViewModel
                     {
                         id = document.id,
                         name = document.name,
                         path = document.path,
+                        created = document.created,
+                        uploaderName = uploaderName,
                         Project = document.Project,
                         ProjectId= document.ProjectId,
                         UserId= document.UserId,
+                        
 
                         // teste ob user der uploader oder projektadmin ist.
                         // Wenn ja dann erlaube User den file zu löschen
@@ -110,6 +122,7 @@ namespace QuestBoard.Controllers
                         name = filename,
                         path = filePath,
                         UserId= CurrentUserID,
+                        created = DateTime.Now,
                     };
 
                     var uploadedDoc = await documentsRepository.AddAsync(newdDoc);

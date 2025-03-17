@@ -5,6 +5,7 @@
         public Guid id { get; set; }
         public string name { get; set; }
         public string path { get; set; }
+        public DateTime created { get; set; }
 
         public Guid UserId { get; set; } // Fremdschlüssel zu user der den file Hochgeladen hat
         public AppUser User { get; set; } // Navigation Property

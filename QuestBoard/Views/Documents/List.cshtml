@@ -51,8 +51,8 @@
                                 @documents.name
                             </a>
                               </td>
-                              <td>1.1.1900</td>
-                              <td>user one</td>
+                              <td>@documents.created</td>
+                              <td>@documents.uploaderName</td>
                             <td>
                                 <a class="btn btn-success @(!documents.isAuthorizedToEdit ? "admin-disabled" : "")" type="button"
                                 asp-area=""
