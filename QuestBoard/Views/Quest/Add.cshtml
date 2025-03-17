@@ -50,7 +50,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Published Date</label>
-                <input type="date" class="form-control bg-dark text-light" id="publishedDate" asp-for="PublishedDate" />
+                <input type="date" class="form-control bg-dark text-light" id="publishedDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="PublishedDate" />
             </div>
 
             <div class="mb-3">
