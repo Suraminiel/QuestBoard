@@ -25,7 +25,8 @@
         <div>
             <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
                asp-controller="ProjectForum"
-               asp-action="List">
+               asp-action="List"
+               asp-route-ProjectId="@Model.Id">
                 Discussions
             </a>
         </div>
@@ -136,7 +137,8 @@
                 <button type="submit" class="btn btn-danger ms-2 @(!Model.isAdmin ? "admin-disabled" : "")"
                         asp-area=""
                         asp-controller="Project"
-                        asp-action="Delete">
+                        asp-action="Delete"
+                        onclick="return confirm('Willst du dieses Projekt wirklich löschen?');">
                     Delete
                 </button>
             </div>
