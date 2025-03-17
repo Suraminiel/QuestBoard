@@ -7,6 +7,8 @@ namespace QuestBoard.Repositories
         Task<IEnumerable<Documents>> GetAllOfThisProject(Guid ProjektId);
         Task<Documents?> GetAsync(Guid id);
         Task<Documents> AddAsync(Documents documents);
+        Task<Documents?> DeleteAsync(Guid id);
+
 
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuestBoard.Data;
 
@@ -11,9 +12,11 @@ using QuestBoard.Data;
 namespace QuestBoard.Migrations
 {
     [DbContext(typeof(QuestboardDbContext))]
-    partial class QuestboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250317142714_One to many relationship zwischen User und Documents")]
+    partial class OnetomanyrelationshipzwischenUserundDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,8 +108,6 @@ namespace QuestBoard.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Documents");
                 });
@@ -272,15 +273,7 @@ namespace QuestBoard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuestBoard.Models.Domain.AppUser", "User")
-                        .WithMany("Documents")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.JobTask", b =>
@@ -299,11 +292,6 @@ namespace QuestBoard.Migrations
                     b.HasOne("QuestBoard.Models.Domain.JobTask", null)
                         .WithMany("Subtasks")
                         .HasForeignKey("JobTaskId");
-                });
-
-            modelBuilder.Entity("QuestBoard.Models.Domain.AppUser", b =>
-                {
-                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.JobTask", b =>

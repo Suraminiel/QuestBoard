@@ -28,6 +28,7 @@ namespace QuestBoard.Controllers
             // get all document paths from database
             var projectDocuments = await documentsRepository.GetAllOfThisProject(projectID);
             var currentProject = await projectRepository.GetAsync(projectID);
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             if (projectDocuments != null && currentProject != null)
             {
@@ -36,17 +37,30 @@ namespace QuestBoard.Controllers
                 {
                     ProjectId = projectID,
                     Project = currentProject,
-                    docs = new List<Documents>(),
+                    docs = new List<SingleDocumentViewModel>(),
                 };
 
                 foreach (var document in projectDocuments)
                 {
-                    documents.docs.Add(document);
+                    documents.docs.Add(new SingleDocumentViewModel
+                    {
+                        id = document.id,
+                        name = document.name,
+                        path = document.path,
+                        Project = document.Project,
+                        ProjectId= document.ProjectId,
+                        UserId= document.UserId,
+
+                        // teste ob user der uploader oder projektadmin ist.
+                        // Wenn ja dann erlaube User den file zu löschen
+                        isAuthorizedToEdit = (currentUserId == document.UserId.ToString() ||                                       // teste ob user der uploader ist
+                                              currentProject.AdminUserRights.Contains(Guid.Parse(currentUserId)) ) ? true : false, // teste ob user projektadmin ist
+                    });
                 }
 
 
                 // Prüfen, ob der aktuelle User Teil des Projekts ist
-                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                
                 if (!currentProject.Users.Any(u => u.Id.ToString() == currentUserId))
                 {
                     return Forbid();
@@ -87,12 +101,15 @@ namespace QuestBoard.Controllers
                         document.CopyTo(stream);
                     }
 
+                    var CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                     // Safe file Path to database
                     var newdDoc = new Documents
                     {
                         ProjectId = ProjectId,
                         name = filename,
                         path = filePath,
+                        UserId= CurrentUserID,
                     };
 
                     var uploadedDoc = await documentsRepository.AddAsync(newdDoc);
@@ -157,6 +174,41 @@ namespace QuestBoard.Controllers
         }
 
 
+        public async Task<IActionResult> DeleteFile(Guid fileId, Guid ProjectId)
+        {
+
+            try
+            {
+                var document = await documentsRepository.GetAsync(fileId);
+                var filepath = document.path;
+
+                // Delete File from server
+                if (System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Delete(filepath);
+                    TempData["SuccessMessage"] = "Datei erfolgreich gelöscht";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Datei nicht gefunden";
+                }
+
+                // Delete Databank Entry
+                var deletedDocumentEntry = documentsRepository.DeleteAsync(document.id);
+
+                if (deletedDocumentEntry != null)
+                {
+                    return RedirectToAction("List", new { projectID = ProjectId });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Fehler beim Löschen: " + ex.Message);
+            }
+
+
+            return RedirectToAction("List", new { projectID = ProjectId });
+        }
 
     }
 

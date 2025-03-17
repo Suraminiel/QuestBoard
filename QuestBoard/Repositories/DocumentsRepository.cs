@@ -19,7 +19,17 @@ namespace QuestBoard.Repositories
           return documents;
         }
 
-       
+        public async Task<Documents?> DeleteAsync(Guid id)
+        {
+            var Document = await questboardDbContext.Documents.FindAsync(id);
+            if (Document != null)
+            {
+                 questboardDbContext.Documents.Remove(Document);
+                 await questboardDbContext.SaveChangesAsync();
+                return Document;
+            }
+            return null;
+        }
 
         public async Task<IEnumerable<Documents>> GetAllOfThisProject(Guid ProjektId)
         {

@@ -13,6 +13,7 @@ namespace QuestBoard.Models.Domain
 
         public ICollection<Projects> Projects  { get; set; }
 
+        public ICollection<Documents> Documents { get; set; }
 
     }
 }

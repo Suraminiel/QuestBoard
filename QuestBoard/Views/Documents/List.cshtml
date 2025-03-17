@@ -53,7 +53,18 @@
                               </td>
                               <td>1.1.1900</td>
                               <td>user one</td>
-                              <td>X</td>
+                            <td>
+                                <a class="btn btn-success @(!documents.isAuthorizedToEdit ? "admin-disabled" : "")" type="button"
+                                asp-area=""
+                                asp-controller="Documents"
+                                asp-action="DeleteFile"
+                                asp-route-fileId="@documents.id"
+                                asp-route-ProjectId="@Model.ProjectId"
+                                onclick="return confirm('Willst du diese Datei wirklich löschen?');"
+                                >
+                                    X
+                                </a>
+                            </td>
                           </tr>
                         }
                 </tbody>
@@ -61,14 +72,19 @@
         </div>
 
         <div class="statusPageSidebar ">
-            
+            <div>
+                <h2 class="siteHeader mb-3">Statistics</h2>
+                <p>Uploads: </p>
+                <p>Downloads: </p>
+                <p>Members: </p>
+            </div>
         </div>
     <form action="/Documents/Upload" method="post" id="uploadForm" enctype="multipart/form-data">
         <div class="main">
-                <p>Upload documents</p>
+                <h2 class="mb-3">Upload documents</h2>
                 <input type="file" id="document" class="form-control bg-dark text-light mb-3 "name="document" />
                 <input type="hidden" class="form-control bg-dark text-light mb-3 " name="ProjectId" value="@Model.ProjectId" />
-            <button type="button" id="btn_upload" onclick="checkFileSize()">Upload</button>
+            <button class="btn btn-light" type="button" id="btn_upload" onclick="checkFileSize()">Upload</button>
             </div>
         </form>
             
