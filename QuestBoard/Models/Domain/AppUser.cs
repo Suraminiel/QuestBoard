@@ -16,6 +16,8 @@ namespace QuestBoard.Models.Domain
         public ICollection<Documents> Documents { get; set; }
 
         public ICollection<ForumPost> forumPosts { get; set; }
+       
+
 
     }
 }

@@ -7,6 +7,7 @@ namespace QuestBoard.Models.ViewModes
         public Guid id { get; set; }
 
         public string name { get; set; }
+        public string author { get; set; }
 
         public ICollection<ForumPost> Postings { get; set; }
 

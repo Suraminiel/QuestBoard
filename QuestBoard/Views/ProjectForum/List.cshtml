@@ -4,77 +4,85 @@
 *@
 @{
 }
-<div class="py-2 mb-2 siteHeader d-flex" >
+
+@if (Model != null)
+{
+    <div class="py-2 mb-2 siteHeader d-flex" >
     
-    <div class="container">
-        <h2>Forum</h2>
-    </div>
+        <div class="container">
+            <h2>Forum</h2>
+        </div>
 
-    <div>
-        <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
-           asp-controller="Project"
-           asp-action="Edit"
-           asp-route-id="@Model.ProjectId">
-            Back
-        </a>
-    </div>
+        <div>
+            <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+               asp-controller="Project"
+               asp-action="Edit"
+               asp-route-id="@Model.ProjectId">
+                Back
+            </a>
+        </div>
    
-</div>
+    </div>
 
 
-<div class="container statusPageContainer mb-3">
-    <div class="statusPageHeader">
+    <div class="container statusPageContainer mb-3">
+        <div class="statusPageHeader">
        
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>Thread</th>
-                        <th>Created</th>
-                        <th>Author</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>der thread</td>
-                        <td>@DateTime.Now</td>
-                        <td>sebastian</td>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Thread</th>
+                            <th>Created</th>
+                            <th>Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var threads in Model.ForumThreads)
+                        {
+                            <tr>
+                                <td>@threads.name</td>
+                                <td>@DateTime.Now</td>
+                                <td>@threads.author</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
            
         
-    </div>
-    <div class="statusPageSidebar ">
-        <div>
-            <h2 class="siteHeader mb-3">Statistics</h2>
-            <p>Threads: </p>
-            <p>Postings: </p>
-            <p>Members: </p>
         </div>
-    </div>
+        <div class="statusPageSidebar ">
+            <div>
+                <h2 class="siteHeader mb-3">Statistics</h2>
+                <p>Threads: </p>
+                <p>Postings: </p>
+                <p>Members: </p>
+            </div>
+        </div>
 
-    <div class="main">
-        <form action="/" method="post">
-            <h2 class="siteHeader mb-3">Start a new Conversation</h2>
+        <div class="main">
+            <form  method="post">
+                <h2 class="siteHeader mb-3">Start a new Conversation</h2>
+                <input type="hidden" class="form-control bg-dark text-light" id="newThreadName_input" asp-for="ProjectId" />
+                <div class="mb-3">
+                    <label>Thread Name</label>
+                    <input type="text" class="form-control bg-dark text-light" id="newThreadName_input" asp-for="newMessage.name"/>
+                </div>
             
-            <div class="mb-3">
-                <label>Heading</label>
-                <input type="text" class="form-control bg-dark text-light" id="newThreadName_input"/>
-            </div>
-            
-            <div class="mb-3">
-                <label>Message</label>
-                <input type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" />
-            </div>
+                <div class="mb-3">
+                    <label>Message</label>
+                    <input type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" asp-for="newMessage.message" />
+                </div>
            
 
-        <a class="btn btn-success mt-3"
-           asp-area=""
-           asp-controller="ProjectForum"
-           asp-action="AddThread">
-            Create new Thread
-        </a>
-        </form>
+                <button class="btn btn-success mt-3"
+                   type="submit"
+                        asp-area=""
+                        asp-controller="ProjectForum"
+                        asp-action="AddThread">
+                    Create new Thread
+                </button>
+            </form>
+        </div>
     </div>
-</div>
+}

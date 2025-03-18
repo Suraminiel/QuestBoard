@@ -4,6 +4,8 @@ namespace QuestBoard.Repositories
 {
     public interface IForumThreadRepository
     {
-        Task<IEnumerable<ForumThread>> GetAllAsync();
+        Task<IEnumerable<ForumThread>?> GetAllAsyncForThisProject(Guid ProjectId);
+        Task<ForumThread> AddAsync(ForumThread forumThread);
+        Task<ForumThread?> GetAsync(Guid id);
     }
 }
