@@ -40,7 +40,16 @@
                         @foreach (var threads in Model.ForumThreads)
                         {
                             <tr>
-                                <td>@threads.name</td>
+                                <td>
+                                    <a class="" type="" 
+                                        asp-area="" 
+                                        asp-controller="ProjectForum" 
+                                        asp-action="ShowThread" 
+                                        asp-route-ProjectId="@Model.ProjectId" 
+                                        asp-route-ThreadId="@threads.id">
+                                        @threads.name
+                                    </a>
+                                    </td>
                                 <td>@DateTime.Now</td>
                                 <td>@threads.author</td>
                             </tr>

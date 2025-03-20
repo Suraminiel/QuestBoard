@@ -27,7 +27,7 @@ namespace QuestBoard.Repositories
 
         public async Task<ForumThread?> GetAsync(Guid id)
         {
-            return await questboardDbContext.forumThreads.FirstOrDefaultAsync(x => x.id == id);
+            return await questboardDbContext.forumThreads.Include(p => p.Postings).FirstOrDefaultAsync(x => x.id == id);
         }
     }
 }

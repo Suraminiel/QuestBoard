@@ -6,14 +6,14 @@ using System.Security.Claims;
 
 namespace QuestBoard.Controllers
 {
-    public class ProjectForum : Controller
+    public class ProjectForumController : Controller
     {
         private readonly IProjectRepository projectRepository;
         private readonly IAppUserRepository appUserRepository;
         private readonly IForumPostRepository forumPostRepository;
         private readonly IForumThreadRepository forumThreadRepository;
 
-        public ProjectForum(IProjectRepository projectRepository, IAppUserRepository appUserRepository, 
+        public ProjectForumController(IProjectRepository projectRepository, IAppUserRepository appUserRepository, 
             IForumPostRepository forumPostRepository, IForumThreadRepository forumThreadRepository)
         {
             this.projectRepository = projectRepository;
@@ -106,5 +106,45 @@ namespace QuestBoard.Controllers
 
             return RedirectToAction("List", new { ProjectId = forumThreadsContainerViewModel.ProjectId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowThread(Guid ProjectId, Guid ThreadId)
+        {
+           var currentProject = await projectRepository.GetAsync(ProjectId);
+           var thread = await forumThreadRepository.GetAsync(ThreadId);
+            
+            if(thread == null || currentProject == null)
+            {
+                return BadRequest();
+            }
+
+            
+            var threadPostingsModel = new List<ForumPostViewModel>();
+
+            foreach(var post in thread.Postings)
+            {
+                threadPostingsModel.Add(new ForumPostViewModel
+                {
+                    id  = post.id,
+                    name = post.name,
+                    message = post.message,
+                    ThreadName = thread.name,
+                    ProjectId = currentProject.Id,
+                    User = post.User,
+                    UserId = post.UserId,
+                    Thread = post.Thread,
+                    ThreadId = ThreadId,
+                });
+            }
+         
+            return View(threadPostingsModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPost(ForumPostViewModel forumPostViewModel)
+        {
+            return RedirectToAction("ShowThread", new { ProjectId = forumPostViewModel.ProjectId, ThreadId =forumPostViewModel.ThreadId });
+        }
+
     }
 }
