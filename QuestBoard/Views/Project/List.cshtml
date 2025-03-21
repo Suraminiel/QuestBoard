@@ -19,27 +19,37 @@
                <tr>
                    <th>Name</th>
                    <th>Description</th>
-                   <th></th>
+                   <th>Created</th>
+                   <th>By</th>
                </tr>
            </thead>
            <tbody>
                @foreach(var project in Model)
                {
                    <tr>
-                       <td>@project.Name</td>
-                       <td>@project.shortDescription</td>
-                        <td>
-                            <a asp-area=""
+                       <td>
+                            <a class="custom-link"
+                                asp-area=""
                                asp-controller="Project"
                                asp-action="Edit"
                                asp-route-id="@project.Id">
-                                Open
+                                @project.Name
                             </a>
-                        </td>
+                           </td>
+                       <td>@project.shortDescription</td>
+                        <td>@DateTime.Now</td>
+                        <td>Creator</td>
                    </tr>
                }
            </tbody>
        </table>
+
+        <a class="btn me-3 mt-3 bg-success text-light "
+           asp-area=""
+           asp-controller="Project"
+           asp-action="Add">
+            Create new Project
+        </a>
    }
    else
    {
