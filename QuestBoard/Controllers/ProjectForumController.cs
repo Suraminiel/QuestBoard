@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace QuestBoard.Controllers
 {
+    [Authorize(Roles = "User")]
     public class ProjectForumController : Controller
     {
         private readonly IProjectRepository projectRepository;
@@ -26,7 +28,8 @@ namespace QuestBoard.Controllers
         {
             var currentProject = await projectRepository.GetAsync(ProjectId);
             var ForumThreadsModel = await forumThreadRepository.GetAllAsyncForThisProject(ProjectId);
-           
+            var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (currentProject == null || ForumThreadsModel == null)
             {
                 return NotFound();
@@ -47,11 +50,13 @@ namespace QuestBoard.Controllers
                 forumThreadsContainerViewModel.ForumThreads.Add(new ForumThreadsViewModel
                 {
                     id = forumThread.id,
+                    created = forumThread.created,
                     name = forumThread.name,
                     Postings = forumThread.Postings,
                     Project = forumThread.Project,
                     ProjectId = forumThread.ProjectId,
                     author = forumThread.Postings[0].User.Name,
+                    isAuthorizedToEdit = (currentProject.AdminUserRights.Contains(Guid.Parse(UserId)) ? true : false)
                 });
             }
 
@@ -73,6 +78,7 @@ namespace QuestBoard.Controllers
             var newThread = new ForumThread
             {
                 id = new Guid(),
+                created = DateTime.Now,
                 name = forumThreadsContainerViewModel.newMessage.name,
                 ProjectId = forumThreadsContainerViewModel.ProjectId,
             };
@@ -90,6 +96,7 @@ namespace QuestBoard.Controllers
             var newMessage = new ForumPost
             {
                 name = "initial Post",
+                created = DateTime.Now,
                 message = forumThreadsContainerViewModel.newMessage.message,
                 Thread = currentThread,
                 ThreadId = currentThread.id,
@@ -126,6 +133,7 @@ namespace QuestBoard.Controllers
                 threadPostingsModel.Add(new ForumPostViewModel
                 {
                     id  = post.id,
+                    created = post.created,
                     name = post.name,
                     message = post.message,
                     ThreadName = thread.name,
@@ -143,6 +151,33 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPost(ForumPostViewModel forumPostViewModel)
         {
+            var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var AppUser = await appUserRepository.GetAsync(Guid.Parse(UserId));
+
+            if (AppUser == null || forumPostViewModel == null)
+            {
+                return BadRequest();
+            }
+
+            // add new message to this thread
+            var newMessage = new ForumPost
+            {
+                name = "initial Post",
+                created = DateTime.Now,
+                message = forumPostViewModel.newMessage,
+              //  Thread = currentThread,
+                ThreadId = forumPostViewModel.ThreadId,
+                User = AppUser,
+                UserId = AppUser.Id
+            };
+
+            var posted = await forumPostRepository.AddAsync(newMessage);
+
+            if (posted == null)
+            {
+                return BadRequest();
+            }
+
             return RedirectToAction("ShowThread", new { ProjectId = forumPostViewModel.ProjectId, ThreadId =forumPostViewModel.ThreadId });
         }
 

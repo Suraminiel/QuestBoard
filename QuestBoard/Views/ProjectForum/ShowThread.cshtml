@@ -25,10 +25,11 @@
 
     <div class="container statusPageContainer mb-3">
         <div class="statusPageHeader">
-
-            <h2>@Model[0].ThreadName</h2>
-            <p class="text-grey">Started by @Model[0].User.Name on </p>
-            <p>@Model[0].message</p>
+            <div class="message-container">
+                <h2>@Model[0].ThreadName</h2>
+                <p class="text-secondary">Started by @Model[0].User.Name on </p>
+                <p>@Model[0].message</p>
+            </div>
         </div>
 
         <div class="statusPageSidebar ">
@@ -43,16 +44,16 @@
         <div class="main ">
             <h2 class="siteHeader">Replies</h2>
 
-            <div>
+            <div class="container">
                 @for (int i= 1; i < Model.Count(); i++)
                 {
-                    <div class="d-flex mb-3 p-3 border rounded">
+                    <div class="d-flex mb-3 p-3 border rounded" >
                         <div class="me-3">
                            <!-- <img src="//post.User.ProfilePictureUrl" alt="User Avatar" class="rounded-circle" width="50">-->
                         </div>
-                        <div>
-                            <h6>@Model[i].User.Name <!--<small class="text-muted">/*post.CreatedAt.ToShortTimeString()*/</small>--></h6>
-                            <p>@Model[i].message</p>
+                        <div class="message-container">
+                            <h6>@Model[i].User.Name <small class="text-secondary">@Model[i].created</small></h6>
+                            <div >@Model[i].message</div>
                         </div>
                     </div>
                 }
@@ -62,9 +63,9 @@
                 <input type="hidden" name="ThreadId" value="@Model[0].ThreadId" />
                 <input type="hidden" name="ProjectId" value="@Model[0].ProjectId" />
                 <div class="mb-3">
-                    <textarea class="form-control" name="newMessage" rows="3" placeholder="Write a reply..." asp-for="@Model[0].newMessage"></textarea>
+                    <textarea class="form-control  bg-dark text-light custom-placeholder" name="newMessage" rows="3" placeholder="Write a reply..." asp-for="@Model[0].newMessage"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary"
+                <button type="submit" class="btn btn-success"
                         asp-area=""
                         asp-controller="ProjectForum"
                         asp-action="AddPost"

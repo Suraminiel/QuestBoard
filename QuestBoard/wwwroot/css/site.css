@@ -161,3 +161,15 @@ select option:checked {
     background-color: turquoise; /* Beispiel: blaue Hintergrundfarbe */
     color: black; /* Textfarbe weiß */
 }
+
+.custom-placeholder::placeholder {
+    color: #ccc; /* Helle Farbe für dunklen Hintergrund */
+    opacity: 1; /* Standardmäßig ist der Placeholder etwas blasser */
+}
+
+.message-container {
+    max-width: 100%;
+    word-break: break-word; /* Lange Wörter umbrechen */
+    overflow-wrap: break-word;
+    white-space: normal; /* Erlaubt Zeilenumbrüche */
+}

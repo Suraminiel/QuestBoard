@@ -6,6 +6,7 @@
         
         public string name { get; set; }
 
+        public DateTime created { get; set; }
         public List<ForumPost> Postings { get; set; }
 
         public Guid ProjectId { get; set; }

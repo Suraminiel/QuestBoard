@@ -32,8 +32,10 @@
                     <thead>
                         <tr>
                             <th>Thread</th>
+                            <th>Replies</th>
                             <th>Created</th>
                             <th>Author</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,17 +43,30 @@
                         {
                             <tr>
                                 <td>
-                                    <a class="" type="" 
+                                    <a  type="" 
                                         asp-area="" 
                                         asp-controller="ProjectForum" 
                                         asp-action="ShowThread" 
                                         asp-route-ProjectId="@Model.ProjectId" 
-                                        asp-route-ThreadId="@threads.id">
+                                        asp-route-ThreadId="@threads.id"
+                                        class="custom-link">
                                         @threads.name
                                     </a>
                                     </td>
-                                <td>@DateTime.Now</td>
+                                    <td>@(threads.Postings.Count-1)</td>
+                                <td>@threads.created</td>
                                 <td>@threads.author</td>
+                                <td>
+                                <a class="btn btn-success @(!threads.isAuthorizedToEdit ? "admin-disabled" : "")" type="button"
+                                   asp-area=""
+                                   asp-controller="ProjectForum"
+                                   asp-action="DeleteThread"
+                                   asp-route-threadId="@threads.id"
+                                   asp-route-ProjectId="@Model.ProjectId"
+                                   onclick="return confirm('Willst du diesen Thread wirklich löschen?');">
+                                    X
+                                </a>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -80,7 +95,8 @@
             
                 <div class="mb-3">
                     <label>Message</label>
-                    <input type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" asp-for="newMessage.message" />
+                   
+                    <textarea type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" asp-for="newMessage.message"></textarea> 
                 </div>
            
 

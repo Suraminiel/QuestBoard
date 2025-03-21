@@ -6,7 +6,7 @@ namespace QuestBoard.Models.ViewModes
     {
 
         public Guid id { get; set; }
-
+        public DateTime created { get; set; }
         public Guid ProjectId { get; set; }
         public string name { get; set; }
 
