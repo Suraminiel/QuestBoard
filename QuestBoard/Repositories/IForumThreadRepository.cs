@@ -1,4 +1,5 @@
-﻿using QuestBoard.Models.Domain;
+﻿using QuestBoard.Data;
+using QuestBoard.Models.Domain;
 
 namespace QuestBoard.Repositories
 {
@@ -7,5 +8,7 @@ namespace QuestBoard.Repositories
         Task<IEnumerable<ForumThread>?> GetAllAsyncForThisProject(Guid ProjectId);
         Task<ForumThread> AddAsync(ForumThread forumThread);
         Task<ForumThread?> GetAsync(Guid id);
+        Task<ForumThread?> DeleteAsync(Guid id);
+       
     }
 }

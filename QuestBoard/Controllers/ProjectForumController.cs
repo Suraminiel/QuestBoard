@@ -181,5 +181,16 @@ namespace QuestBoard.Controllers
             return RedirectToAction("ShowThread", new { ProjectId = forumPostViewModel.ProjectId, ThreadId =forumPostViewModel.ThreadId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DeleteThread(Guid threadId, Guid ProjectId)
+        {
+            var deleted = await forumThreadRepository.DeleteAsync(threadId);
+            if (deleted == null)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction("List", new { ProjectId = ProjectId });
+        }
     }
 }

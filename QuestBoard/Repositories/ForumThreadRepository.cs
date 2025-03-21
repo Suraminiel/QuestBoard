@@ -19,6 +19,25 @@ namespace QuestBoard.Repositories
             return forumThread;
         }
 
+        public async Task<ForumThread?> DeleteAsync(Guid id)
+        {
+            var existingThread = await questboardDbContext.forumThreads
+                .Include(t => t.Postings)
+                .FirstOrDefaultAsync(t => t.id == id);
+
+            if (existingThread != null)
+            {
+                // Delete Postings
+               // questboardDbContext.ForumPosts.RemoveRange(existingThread.Postings);
+
+                questboardDbContext.forumThreads.Remove(existingThread);
+                await questboardDbContext.SaveChangesAsync();
+                return existingThread;
+            }
+            return null;
+        }
+
+       
 
         public async Task<IEnumerable<ForumThread>?> GetAllAsyncForThisProject(Guid ProjectId)
         {
