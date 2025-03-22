@@ -54,6 +54,13 @@
                             </ul>
                         </li>
 
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                        <li>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ProfilSettings">Settings</a>
+                        </li>
+                        }
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Tasks
@@ -106,10 +113,10 @@
                     <div class="d-flex align-items-center">
                         @if(signInManager.IsSignedIn(User))
                         {
-                            <div class="me-3 text-light">
-                                @User?.Identity?.Name
-                                @User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-
+                            <div class="me-3 text-light d-flex">
+                                <div class="mt-1 me-3">@User?.Identity?.Name</div>
+                                <!--//User.FindFirst(ClaimTypes.NameIdentifier)?.Value-->
+                                <img class="round-img-small" src="/files/images/DefaultPicxcfInvert.png" />
                             </div>
 
                             <a class="btn me-3 bg-light text-dark"

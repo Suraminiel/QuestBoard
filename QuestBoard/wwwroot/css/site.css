@@ -173,3 +173,17 @@ select option:checked {
     overflow-wrap: break-word;
     white-space: normal; /* Erlaubt Zeilenumbrüche */
 }
+
+.round-img {
+    width: 300px; /* oder eine andere Größe */
+    height: 300px; /* gleich wie width für einen perfekten Kreis */
+    border-radius: 50%;
+    object-fit: cover; /* Verhindert Verzerrungen */
+}
+
+.round-img-small {
+    width: 35px; /* oder eine andere Größe */
+    height: 35px; /* gleich wie width für einen perfekten Kreis */
+    border-radius: 50%;
+    object-fit: cover; /* Verhindert Verzerrungen */
+}

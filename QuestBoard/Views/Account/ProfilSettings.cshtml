@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="py-2 mb-2 siteHeader d-flex">
+    <div class="container">
+        <h2>Profil Settings</h2>
+    </div>
+
+</div>
+
+<div class="container statusPageContainer  mb-3 ">
+    <div class="statusPageHeader mb-3">
+
+        In this section you can update your account information or delete your account.
+
+    </div>
+
+    <div class="statusPageSidebar">
+       <form action="/Documents/Upload" method="post" id="uploadForm" enctype="multipart/form-data">
+            <h2 class="mb-4 ">Upload a Profil Picture</h2>
+            <img class="mb-4 round-img" src="/files/images/DefaultPicxcfInvert.png" />
+
+            <input type="file" id="picture" class="form-control bg-dark text-light mb-3 " name="picture" />
+            <button class="btn btn-light" type="button" id="btn_upload" onclick="checkFileSize()">Upload</button>
+       </form>
+    </div>
+
+    <div class="main">
+
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control bg-dark text-light" id="Name" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control bg-dark text-light" id="Email" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="text" class="form-control bg-dark text-light" id="Password" />
+            </div>
+            <button class="btn btn-success" type="submit">Save</button>
+        </form>
+
+        <div class="border border-danger rounded mt-5">
+            <h5 class="text-bg-danger mb-3">Danger Zone</h5>
+            <p> To delete your Account type "delete" and press the button </p>
+            <form method="post">
+                  <div class="d-flex">
+                        <button class="btn btn-danger me-3">Delete</button>
+                        <input class="form-control bg-dark" type="text" name="name" placeholder="Type DELETE" value="" />
+                  </div>
+            </form>
+            
+        </div>
+    </div>
+</div>

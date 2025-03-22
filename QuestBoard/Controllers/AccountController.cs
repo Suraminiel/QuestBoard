@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -6,6 +7,7 @@ using QuestBoard.Repositories;
 
 namespace QuestBoard.Controllers
 {
+    
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -96,6 +98,13 @@ namespace QuestBoard.Controllers
 
         [HttpGet]
         public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<IActionResult> ProfilSettings()
         {
             return View();
         }
