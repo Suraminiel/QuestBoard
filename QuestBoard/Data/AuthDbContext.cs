@@ -72,7 +72,7 @@ namespace QuestBoard.Data
                     UserName = superAdminEmail,
                     Email = superAdminEmail
                 };
-
+                
                 var result = userManager.CreateAsync(superAdminUser, superAdminPassword).Result;
 
                 if (result.Succeeded)

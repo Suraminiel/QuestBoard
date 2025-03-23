@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
+using System.Security.Claims;
 
 namespace QuestBoard.Controllers
 {
@@ -106,7 +107,103 @@ namespace QuestBoard.Controllers
         [HttpGet]
         public async Task<IActionResult> ProfilSettings()
         {
-            return View();
+            //appUserRepository
+            Guid CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var UserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var Username = User?.Identity?.Name;
+
+            AccountData accountData = new AccountData
+            {
+                name = Username,
+                email = UserEmail,
+                id = CurrentUserID,
+            };
+
+            return View(accountData);
         }
+
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> ProfilSettings(AccountData accountData)
+        {
+           
+
+            var currentUser = await userManager.FindByIdAsync(accountData.id.ToString());
+            var appUserProfil = await appUserRepository.GetAsync(Guid.Parse(currentUser.Id));
+
+            if (currentUser == null || appUserProfil == null)
+            {
+                return BadRequest("Could not find User");
+            }
+
+            bool authorized = false;
+
+            if (accountData.password != null)
+            {
+               authorized = await userManager.CheckPasswordAsync(currentUser, accountData.password);
+            }
+
+            
+            if (authorized)
+            {
+
+
+                currentUser.Email = accountData.email;
+                currentUser.UserName = accountData.name;
+
+                if (accountData.newPassword != null &&  
+                    accountData.newPasswordConfirm != null &&
+                    accountData.newPassword == accountData.newPasswordConfirm)
+                {
+                    currentUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(currentUser, accountData.newPassword);
+                }
+
+                // superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "Superadmin@123");
+
+
+                var updatedUser = await userManager.UpdateAsync(currentUser);
+
+                if (updatedUser == null)
+                {
+                    return BadRequest();
+                }
+                await signInManager.RefreshSignInAsync(currentUser);
+
+
+
+                appUserProfil.Name = currentUser.UserName;
+
+                var updatedAppUserProfil = appUserRepository.UpdateAsync(appUserProfil);
+
+                if (updatedAppUserProfil == null)
+                {
+                    return BadRequest();
+                }
+            }
+            else 
+            {
+                return BadRequest("wrong pw");
+            }
+
+            return RedirectToAction("ProfilSettings");    
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task <IActionResult> UploadPicture (IFormFile Picture)
+        {
+
+            
+            var type = Picture.ContentType;
+
+            if (type != "image/png")
+            {
+                return BadRequest("Wrong File Type");
+            }
+
+            return RedirectToAction("ProfilSettings");
+        }
+
     }
 }

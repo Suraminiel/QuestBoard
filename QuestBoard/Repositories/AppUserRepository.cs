@@ -41,9 +41,17 @@ namespace QuestBoard.Repositories
             return await questboardDbContext.Users.FirstOrDefaultAsync(x => x.Name == name);
         }
 
-        public Task<AppUser?> UpdateAsync(AppUser appUser)
+        public async Task<AppUser?> UpdateAsync(AppUser appUser)
         {
-            throw new NotImplementedException();
+            var currentUser = await questboardDbContext.Users.FindAsync(appUser.Id);
+
+            if(currentUser != null)
+            {
+                currentUser.Name = appUser.Name;
+                await questboardDbContext.SaveChangesAsync();
+                return currentUser;
+            }
+            return null;
         }
     }
 }
