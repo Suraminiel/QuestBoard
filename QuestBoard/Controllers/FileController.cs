@@ -30,5 +30,22 @@ namespace QuestBoard.Controllers
 
             return File(imageBytes, contentType);
         }
+
+        [HttpGet("profilPic/{userId}")]
+        public IActionResult ProfilPic(string userId)
+        {
+            string filePath = Path.Combine(_imagePath, userId, "profilPicture.png");
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
+            string contentType = "image/jpeg";
+
+
+            return File(imageBytes, contentType);
+        }
     }
 }

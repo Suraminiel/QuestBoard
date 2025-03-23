@@ -22,10 +22,11 @@
     <div class="statusPageSidebar">
         <form action="/Account/UploadPicture" method="post" id="uploadForm" enctype="multipart/form-data">
             <h2 class="mb-4 ">Upload a Profil Picture</h2>
-            <img class="mb-4 round-img" src="/files/images/DefaultPicxcfInvert.png" alt="Profil Picture"/>
+            <img class="mb-4 round-img" src="@Model.profilPicturePath" alt="Profil Picture" />
 
             <input type="file" id="picture" class="form-control bg-dark text-light mb-3 " name="picture" />
             <button class="btn btn-light" type="submit" id="btn_upload" >Upload</button>
+            <a class="btn btn-light" type="button" id="deletePic" asp-area="" asp-controller="Account" asp-action="DeletePic">Delete Picture</a>
        </form>
     </div>
 

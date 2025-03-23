@@ -112,11 +112,25 @@ namespace QuestBoard.Controllers
             var UserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
             var Username = User?.Identity?.Name;
 
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + CurrentUserID);
+            if (!Directory.Exists(uploadPath))
+            {
+                uploadPath = "/files/images/DefaultPicxcfInvert.png";
+            }
+            else
+            {
+                uploadPath = "/files/profilPic/" + CurrentUserID;
+            }
+            //UploadedFiles\ProfilPictures\48cdf196-f0d2-4681-90ef-1761e1caa9a3
+
+
             AccountData accountData = new AccountData
             {
                 name = Username,
                 email = UserEmail,
                 id = CurrentUserID,
+                profilPicturePath = uploadPath,
             };
 
             return View(accountData);
@@ -194,16 +208,75 @@ namespace QuestBoard.Controllers
         public async Task <IActionResult> UploadPicture (IFormFile Picture)
         {
 
-            
-            var type = Picture.ContentType;
-
-            if (type != "image/png")
+            if (Picture != null)
             {
-                return BadRequest("Wrong File Type");
+                try
+                {
+                    var type = Picture.ContentType;
+
+                    if (type != "image/png")
+                    {
+                        return BadRequest("Wrong File Type");
+                    }
+
+                    var CurrentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (CurrentUserId == null)
+                    {
+                        return BadRequest("");
+                    }
+
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + CurrentUserId);
+                    if(!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    var filename = "profilPicture.png";
+                    var filePath = Path.Combine(uploadPath, filename);
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                       // return BadRequest("file already exist");
+                    }
+
+                    using (var stream = new FileStream(filePath,FileMode.Create))
+                    {
+                        Picture.CopyTo(stream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, "Fehler beim Upload: " + ex.Message);
+                }
             }
 
             return RedirectToAction("ProfilSettings");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DeletePic ()
+        {
+
+            var CurrentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (CurrentUserId == null)
+            {
+                return BadRequest("");
+            }
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + CurrentUserId);
+            var profilPic = uploadPath + "\\profilPicture.png";
+            if (Directory.Exists(uploadPath) && System.IO.File.Exists(profilPic))
+            {
+                    System.IO.File.Delete(profilPic);
+                    Directory.Delete(uploadPath);
+            
+            }
+
+                return RedirectToAction("ProfilSettings");
+        }
+
+      
     }
 }
