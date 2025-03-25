@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -7,11 +8,11 @@ using QuestBoard.Repositories;
 namespace QuestBoard.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminTagController : Controller
+    public class AdminTagController : BaseController
     {
         private readonly ITagRepository tagRepository;
 
-        public AdminTagController(ITagRepository tagRepository)
+        public AdminTagController(ITagRepository tagRepository, SignInManager<IdentityUser> signInManager) : base (signInManager)
         {
             this.tagRepository = tagRepository;
         }

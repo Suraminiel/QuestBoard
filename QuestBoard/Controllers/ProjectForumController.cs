@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -8,7 +9,7 @@ using System.Security.Claims;
 namespace QuestBoard.Controllers
 {
     [Authorize(Roles = "User")]
-    public class ProjectForumController : Controller
+    public class ProjectForumController : BaseController
     {
         private readonly IProjectRepository projectRepository;
         private readonly IAppUserRepository appUserRepository;
@@ -16,7 +17,8 @@ namespace QuestBoard.Controllers
         private readonly IForumThreadRepository forumThreadRepository;
 
         public ProjectForumController(IProjectRepository projectRepository, IAppUserRepository appUserRepository, 
-            IForumPostRepository forumPostRepository, IForumThreadRepository forumThreadRepository)
+            IForumPostRepository forumPostRepository, IForumThreadRepository forumThreadRepository, SignInManager<IdentityUser> signInManager)
+            : base(signInManager) 
         {
             this.projectRepository = projectRepository;
             this.appUserRepository = appUserRepository;

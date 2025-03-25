@@ -9,13 +9,14 @@ using System.Security.Claims;
 namespace QuestBoard.Controllers
 {
     
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IAppUserRepository appUserRepository;
 
         public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository)
+            : base(signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

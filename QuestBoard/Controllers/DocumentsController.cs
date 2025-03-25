@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -12,13 +13,14 @@ using System.Xml.Linq;
 namespace QuestBoard.Controllers
 {
     [Authorize(Roles = "User")]
-    public class DocumentsController : Controller
+    public class DocumentsController : BaseController
     {
         private readonly IProjectRepository projectRepository;
         private readonly IDocumentsRepository documentsRepository;
         private readonly IAppUserRepository appUserRepository;
 
-        public DocumentsController(IProjectRepository projectRepository, IDocumentsRepository documentsRepository, IAppUserRepository appUserRepository)
+        public DocumentsController(IProjectRepository projectRepository, IDocumentsRepository documentsRepository, IAppUserRepository appUserRepository, SignInManager<IdentityUser> signInManager)
+            : base(signInManager) 
         {
             this.projectRepository = projectRepository;
             this.documentsRepository = documentsRepository;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
@@ -10,13 +11,14 @@ using System.Threading.Tasks;
 namespace QuestBoard.Controllers
 {
     [Authorize(Roles = "User")]
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
         private readonly IAppUserRepository appUserRepository;
         private readonly IProjectRepository projectRepository;
         private readonly IQuestboardTaskRepository questboardTaskRepository;
 
-        public ProjectController(IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository)
+        public ProjectController(IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository, SignInManager<IdentityUser> signInManager)
+            : base (signInManager)
         {
             this.appUserRepository = appUserRepository;
             this.projectRepository = projectRepository;

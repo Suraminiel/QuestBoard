@@ -9,18 +9,20 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using QuestBoard.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace QuestBoard.Controllers
 {
     [Authorize(Roles = "User")]
-    public class QuestController : Controller
+    public class QuestController : BaseController
     {
         private readonly ITagRepository tagRepository;
         private readonly IQuestboardTaskRepository questboardTaskRepository;
         private readonly IAppUserRepository appUserRepository;
         private readonly IProjectRepository projectRepository;
 
-        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository, IAppUserRepository appUserRepository, IProjectRepository projectRepository)
+        public QuestController(ITagRepository tagRepository, IQuestboardTaskRepository questboardTaskRepository, IAppUserRepository appUserRepository, IProjectRepository projectRepository,
+             SignInManager<IdentityUser> signInManager) : base (signInManager)
         {
             this.tagRepository = tagRepository;
             this.questboardTaskRepository = questboardTaskRepository;
