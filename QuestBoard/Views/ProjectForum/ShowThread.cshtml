@@ -25,11 +25,21 @@
 
     <div class="container statusPageContainer mb-3">
         <div class="statusPageHeader">
-            <div class="message-container">
-                <h2>@Model[0].ThreadName</h2>
-                <p class="text-secondary">Started by @Model[0].User.Name on </p>
-                <p>@Model[0].message</p>
+           
+            <div class="d-flex">
+                <img class="me-3 mt-1 round-img-forum" src="@Model[0].User.ProfilePicturePath" alt="Profil Picture" title="@Model[0].User.Name" />
+                <div class="message-container">
+
+                    <h2>@Model[0].ThreadName</h2>
+
+
+                    <p class="text-secondary">Started by @Model[0].User.Name on </p>
+
+
+                    <p>@Model[0].message</p>
+                </div>
             </div>
+            
         </div>
 
         <div class="statusPageSidebar ">
@@ -51,10 +61,18 @@
                         <div class="me-3">
                            <!-- <img src="//post.User.ProfilePictureUrl" alt="User Avatar" class="rounded-circle" width="50">-->
                         </div>
-                        <div class="message-container">
-                            <h6>@Model[i].User.Name <small class="text-secondary">@Model[i].created</small></h6>
-                            <div >@Model[i].message</div>
+                        <div class="d-flex">
+                            <img class="me-3 round-img-forum" src="@Model[i].User.ProfilePicturePath" alt="Profil Picture" title="@Model[i].User.Name" />
+                            <div class="message-container">
+
+
+                                <h6>@Model[i].User.Name <small class="text-secondary">@Model[i].created</small></h6>
+
+
+                                <div>@Model[i].message</div>
+                            </div>
                         </div>
+                        
                     </div>
                 }
             </div>

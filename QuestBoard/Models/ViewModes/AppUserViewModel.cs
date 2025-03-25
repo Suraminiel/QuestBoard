@@ -6,6 +6,7 @@ namespace QuestBoard.Models.ViewModes
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string ProfilePicturePath { get; set; }
 
         //   public ICollection<Guid> OwnedTasks { get; set; }
         //   public string UserID { get; set; }

@@ -85,7 +85,9 @@
                             {
 
                                 <tr>
-                                    <td>@Model.Users[i].Name</td>
+                                    <td>
+                                        <img class=" round-img-small" src="@Model.Users[i].ProfilePicturePath" alt="Profil Picture" title="@Model.Users[i].Name" />
+                                        @Model.Users[i].Name</td>
                                     <td>
                                         <div class="form-check @(!Model.isAdmin ? "admin-disabled" : "")">
                                             <input type="hidden" name="Users[i].IsAdminOfSelectedProject" value="false" />
@@ -190,7 +192,10 @@
                             <td>
                                 @foreach (var user in JobTask.Users)
                                 {
-                                    <span class="badge bg-success   text-light me-1" style="max-width: 75px; overflow: hidden; text-overflow: ellipsis;">@user.Name</span>
+                                    
+                                        <img class=" round-img-small" src="@user.ProfilePicturePath" alt="Profil Picture" title="@user.Name" />
+                                   <!-- <span class="badge bg-success   text-light me-1" style="max-width: 75px; overflow: hidden; text-overflow: ellipsis;">@user.Name</span> -->
+                                    
                                 }
                             </td>
                             <td style="min-width: 150px">

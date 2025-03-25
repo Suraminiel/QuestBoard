@@ -55,7 +55,9 @@
                                     </td>
                                     <td>@(threads.Postings.Count-1)</td>
                                 <td>@threads.created</td>
-                                <td>@threads.author</td>
+                                <td>
+                                <img class=" round-img-small" src="@threads.authorProfilePicturePath" alt="Profil Picture" title="@threads.author" />
+                                    @threads.author</td>
                                 <td>
                                 <a class="btn btn-success @(!threads.isAuthorizedToEdit ? "admin-disabled" : "")" type="button"
                                    asp-area=""

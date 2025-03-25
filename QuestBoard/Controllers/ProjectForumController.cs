@@ -49,6 +49,14 @@ namespace QuestBoard.Controllers
             // Add loop through existing threads. map them to ForumThreadViewModel and add them to forumThreadsContainerViewModel
             foreach (var forumThread in ForumThreadsModel)
             {
+                var  ThreadCreatorId = forumThread.Postings[0].UserId;
+                var appUser = await appUserRepository.GetAsync(ThreadCreatorId);
+
+                if (appUser == null)
+                {
+                    break;
+                }
+                
                 forumThreadsContainerViewModel.ForumThreads.Add(new ForumThreadsViewModel
                 {
                     id = forumThread.id,
@@ -58,6 +66,7 @@ namespace QuestBoard.Controllers
                     Project = forumThread.Project,
                     ProjectId = forumThread.ProjectId,
                     author = forumThread.Postings[0].User.Name,
+                    authorProfilePicturePath = appUser.ProfilePicturePath,
                     isAuthorizedToEdit = (currentProject.AdminUserRights.Contains(Guid.Parse(UserId)) ? true : false)
                 });
             }

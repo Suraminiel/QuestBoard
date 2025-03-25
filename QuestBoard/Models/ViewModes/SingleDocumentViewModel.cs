@@ -10,6 +10,7 @@ namespace QuestBoard.Models.ViewModes
         public string path { get; set; }
         public DateTime created { get; set; }
         public string uploaderName { get; set; }
+        public string uploaderProfilePicPath { get; set; }
         public bool isAuthorizedToEdit { get; set; }
         public Guid UserId { get; set; } // Fremdschlüssel zu user der den file Hochgeladen hat
         public Guid ProjectId { get; set; } // Fremdschlüssel

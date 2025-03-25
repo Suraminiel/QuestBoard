@@ -226,6 +226,12 @@ namespace QuestBoard.Controllers
                     {
                         return BadRequest("");
                     }
+                    var appUserProfil = await appUserRepository.GetAsync(Guid.Parse(CurrentUserId));
+
+                    if (appUserProfil == null) 
+                    {
+                        return BadRequest();
+                    }
 
                     var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + CurrentUserId);
                     if(!Directory.Exists(uploadPath))
@@ -244,6 +250,15 @@ namespace QuestBoard.Controllers
                     using (var stream = new FileStream(filePath,FileMode.Create))
                     {
                         Picture.CopyTo(stream);
+                    }
+
+                    // Update FilePath in App Userr
+                    appUserProfil.ProfilePicturePath = "/files/profilPic/" + CurrentUserId;
+                    var updateAppUser = await appUserRepository.UpdateAsync(appUserProfil);
+
+                    if (updateAppUser != null) 
+                    {
+                        // success
                     }
                 }
                 catch (Exception ex)
@@ -266,6 +281,13 @@ namespace QuestBoard.Controllers
                 return BadRequest("");
             }
 
+            var appUserProfil = await appUserRepository.GetAsync(Guid.Parse(CurrentUserId));
+
+            if (appUserProfil == null)
+            {
+                return BadRequest();
+            }
+
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + CurrentUserId);
             var profilPic = uploadPath + "\\profilPicture.png";
             if (Directory.Exists(uploadPath) && System.IO.File.Exists(profilPic))
@@ -275,7 +297,17 @@ namespace QuestBoard.Controllers
             
             }
 
-                return RedirectToAction("ProfilSettings");
+            // Update FilePath in App Userr
+            appUserProfil.ProfilePicturePath = "/files/images/DefaultPicxcfInvert.png";
+            var updateAppUser = await appUserRepository.UpdateAsync(appUserProfil);
+
+            if (updateAppUser != null)
+            {
+                // success
+            }
+
+
+            return RedirectToAction("ProfilSettings");
         }
 
       

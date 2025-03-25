@@ -52,7 +52,10 @@
                             </a>
                               </td>
                               <td>@documents.created</td>
-                              <td>@documents.uploaderName</td>
+                              <td>
+                                <img class="round-img-small" src="@documents.uploaderProfilePicPath" alt="Profil Picture" title="@documents.uploaderName" />
+                                  @documents.uploaderName
+                                  </td>
                             <td>
                                 <a class="btn btn-success @(!documents.isAuthorizedToEdit ? "admin-disabled" : "")" type="button"
                                 asp-area=""

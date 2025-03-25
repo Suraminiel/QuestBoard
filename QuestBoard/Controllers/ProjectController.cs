@@ -92,6 +92,8 @@ namespace QuestBoard.Controllers
             
             if (currentProject != null)
             {
+                
+
                 var editProject = new EditProjectRequest
                 {
                     Name = currentProject.Name,
@@ -101,20 +103,20 @@ namespace QuestBoard.Controllers
                     //Users = currentProject.Users,
                     AdminUserRights = currentProject.AdminUserRights.ToList(),
                     //Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
-                    TaskOverviews = currentProject.JobTasks.Select(t  => new TaskOverview { 
+                    TaskOverviews = currentProject.JobTasks.Select(t => new TaskOverview {
                         Priority = t.Priority,
                         Name = t.Name,
-                        Id = t.Id, 
+                        Id = t.Id,
                         //AdminUserRights = t.AdminUserRights,
                         Author = t.Author,
                         Description = t.Description,
-                       // ProjectId = t.ProjectId,
+                        // ProjectId = t.ProjectId,
                         Deadline = t.Deadline,
                         Tags = t.Tags,
                         Users = t.Users,
-                        Subtasks = t.Subtasks}).ToList(),
+                        Subtasks = t.Subtasks }).ToList(),
 
-                  
+
                 };
 
                 ICollection<AppUserViewModel> Users = new List<AppUserViewModel>();
@@ -124,8 +126,7 @@ namespace QuestBoard.Controllers
                     {
                         Id = users.Id,
                         Name = users.Name,
-
-                        
+                        ProfilePicturePath = users.ProfilePicturePath,
 
                     };
 

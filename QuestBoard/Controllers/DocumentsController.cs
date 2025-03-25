@@ -51,7 +51,13 @@ namespace QuestBoard.Controllers
                     // Get uploader name
                     var uploader = await appUserRepository.GetAsync(document.UserId);
                     var uploaderName = "failed to retrieve name";
-                    if (uploader != null) uploaderName = uploader.Name;
+                    var profilePicturePath = "";
+                    if (uploader != null)
+                    {
+                        uploaderName = uploader.Name;
+                        profilePicturePath = uploader.ProfilePicturePath;
+
+                    }
 
                     documents.docs.Add(new SingleDocumentViewModel
                     {
@@ -60,6 +66,7 @@ namespace QuestBoard.Controllers
                         path = document.path,
                         created = document.created,
                         uploaderName = uploaderName,
+                        uploaderProfilePicPath = profilePicturePath,
                         Project = document.Project,
                         ProjectId= document.ProjectId,
                         UserId= document.UserId,

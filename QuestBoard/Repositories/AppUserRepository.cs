@@ -48,6 +48,7 @@ namespace QuestBoard.Repositories
             if(currentUser != null)
             {
                 currentUser.Name = appUser.Name;
+                currentUser.ProfilePicturePath = appUser.ProfilePicturePath;
                 await questboardDbContext.SaveChangesAsync();
                 return currentUser;
             }

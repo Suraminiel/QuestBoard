@@ -187,3 +187,10 @@ select option:checked {
     border-radius: 50%;
     object-fit: cover; /* Verhindert Verzerrungen */
 }
+
+.round-img-forum {
+    width: 45px; /* oder eine andere Größe */
+    height: 45px; /* gleich wie width für einen perfekten Kreis */
+    border-radius: 50%;
+    object-fit: cover; /* Verhindert Verzerrungen */
+}
