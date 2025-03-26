@@ -9,5 +9,6 @@
         public string? newPassword { get; set; }
         public string? newPasswordConfirm { get; set; }
         public string profilPicturePath { get; set; }
+        public string deleteConfirmation { get; set; }
     }
 }

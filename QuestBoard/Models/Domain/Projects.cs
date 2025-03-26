@@ -17,5 +17,7 @@
         public ICollection<Documents> Documents { get; set; }
 
         public ICollection<ForumThread> Threads { get; set; }
+
+   
     }
 }

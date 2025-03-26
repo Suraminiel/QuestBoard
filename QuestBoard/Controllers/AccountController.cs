@@ -14,13 +14,17 @@ namespace QuestBoard.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IAppUserRepository appUserRepository;
+        private readonly IProjectRepository projectRepository;
+        private readonly IQuestboardTaskRepository questboardTaskRepository;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository)
             : base(signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appUserRepository = appUserRepository;
+            this.projectRepository = projectRepository;
+            this.questboardTaskRepository = questboardTaskRepository;
         }
         [HttpGet]
         public IActionResult Register()
@@ -49,16 +53,20 @@ namespace QuestBoard.Controllers
                 {
                     Id = Guid.Parse(userId),
                     Name = identityUser.UserName,
+                    ProfilePicturePath = "/files/images/DefaultPicxcfInvert.png"
                 };
 
                 // Seed AppUser Table with SuperAdmin ID
-                appUserRepository.AddAsync(AppUserProfile);
+                var appUserResult = appUserRepository.AddAsync(AppUserProfile);
+
+                
 
                 var roleIdentityResult = await userManager.AddToRoleAsync(identityUser, "User");
 
                 if (roleIdentityResult.Succeeded)
                 {
-                    return RedirectToAction("Register", "Account");
+                    var signInResult = await signInManager.PasswordSignInAsync(registerViewModel.Username, registerViewModel.Password, false, false);
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return View();
@@ -310,6 +318,85 @@ namespace QuestBoard.Controllers
             return RedirectToAction("ProfilSettings");
         }
 
-      
+        [HttpPost]
+        public async Task<IActionResult> DeleteAccount(AccountData accountData)
+        {
+            if (accountData != null &&
+                accountData.deleteConfirmation == "DELETE")
+            {
+                // Delete AppUser from QuestboardDbContext
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var appUser = await appUserRepository.GetAsync(Guid.Parse(currentUserId));
+                if (appUser == null) 
+                {
+                    return BadRequest();
+                }
+
+                // Delete all Project that were created by this User
+                foreach (var project in appUser.Projects)
+                {
+                    if (project.AdminUserRights[0] == Guid.Parse(currentUserId))
+                    {
+
+                        //delete tasks
+                        foreach(var task in project.JobTasks)
+                        {
+                            
+                            var taskDeleteResult = await questboardTaskRepository.DeleteAsync(task.Id);
+                            if (taskDeleteResult == null) 
+                            {
+                                return BadRequest();
+                            }
+                            
+                        }
+                        // delete this project
+                        var projectDeletionResult = await projectRepository.DeleteAsync(project.Id);
+                        if (projectDeletionResult == null)
+                        {
+                            return BadRequest("Failed to delete Projects of this account");
+                        }
+                    }
+                }
+
+                var deleteResult = await appUserRepository.DeleteAsync(appUser.Id);
+                if (deleteResult == null) 
+                {
+                    return BadRequest();
+                }
+
+
+                
+
+                // Delete User from AuthDbContext
+
+                // var identityResult = await userManager.CreateAsync(identityUser, registerViewModel.Password);
+                var identityUser = await userManager.FindByIdAsync(currentUserId);
+                if (identityUser == null) 
+                { 
+                    return BadRequest(); 
+                }
+
+                var identityResult = await userManager.DeleteAsync(identityUser);
+                if (identityResult == null)
+                {
+                    return BadRequest();
+                }
+
+                // Delete ProfilePicture
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles\\ProfilPictures\\" + currentUserId);
+                var profilPic = uploadPath + "\\profilPicture.png";
+                if (Directory.Exists(uploadPath) && System.IO.File.Exists(profilPic))
+                {
+                    System.IO.File.Delete(profilPic);
+                    Directory.Delete(uploadPath);
+
+                }
+
+
+                return RedirectToAction("Logout");
+            }
+
+            return BadRequest("Failed to delete account");
+        }
     }
 }

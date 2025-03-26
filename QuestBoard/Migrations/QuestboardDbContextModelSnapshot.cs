@@ -34,7 +34,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("AppUserJobTask");
+                    b.ToTable("AppUserJobTask", (string)null);
                 });
 
             modelBuilder.Entity("AppUserProjects", b =>
@@ -49,7 +49,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("AppUserProjects");
+                    b.ToTable("AppUserProjects", (string)null);
                 });
 
             modelBuilder.Entity("JobTaskTag", b =>
@@ -64,7 +64,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("TasksId");
 
-                    b.ToTable("JobTaskTag");
+                    b.ToTable("JobTaskTag", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.AppUser", b =>
@@ -83,7 +83,7 @@ namespace QuestBoard.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.Documents", b =>
@@ -115,7 +115,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Documents", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.ForumPost", b =>
@@ -147,7 +147,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ForumPosts");
+                    b.ToTable("ForumPosts", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.ForumThread", b =>
@@ -170,7 +170,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("forumThreads");
+                    b.ToTable("forumThreads", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.JobTask", b =>
@@ -211,7 +211,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("JobsAndTasks");
+                    b.ToTable("JobsAndTasks", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.Projects", b =>
@@ -236,7 +236,7 @@ namespace QuestBoard.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.Subtask", b =>
@@ -259,7 +259,7 @@ namespace QuestBoard.Migrations
 
                     b.HasIndex("JobTaskId");
 
-                    b.ToTable("Subtask");
+                    b.ToTable("Subtask", (string)null);
                 });
 
             modelBuilder.Entity("QuestBoard.Models.Domain.Tag", b =>
@@ -278,7 +278,7 @@ namespace QuestBoard.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("AppUserJobTask", b =>

@@ -20,9 +20,16 @@ namespace QuestBoard.Repositories
             return appUser;
         }
 
-        public Task<AppUser?> DeleteAsync(Guid id)
+        public async Task<AppUser?> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var Appuser = await questboardDbContext.Users.FindAsync(id);
+            if (Appuser != null) 
+            {
+                questboardDbContext.Users.Remove(Appuser);
+                await questboardDbContext.SaveChangesAsync();
+                return Appuser;
+            }
+            return null;
         }
 
         public Task<IEnumerable<AppUser>> GetAllAsync()
@@ -32,7 +39,11 @@ namespace QuestBoard.Repositories
 
         public async Task<AppUser?> GetAsync(Guid id)
         {
-            return await questboardDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return await questboardDbContext.Users
+                .Include(x => x.Projects)
+                .ThenInclude(s => s.JobTasks)
+                .ThenInclude(s => s.Subtasks)
+                .FirstOrDefaultAsync(x => x.Id == id);
             //return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
         }
 

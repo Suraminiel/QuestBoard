@@ -80,7 +80,7 @@ namespace QuestBoard.Controllers
             AdminRights.Add(CurrentUserID);
             model.AdminUserRights = AdminRights;
 
-            projectRepository.AddAsync(model);
+            await projectRepository.AddAsync(model);
 
             return RedirectToAction("List");
         }

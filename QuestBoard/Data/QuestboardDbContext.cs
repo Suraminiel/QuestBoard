@@ -7,7 +7,11 @@ namespace QuestBoard.Data
     {
         public QuestboardDbContext(DbContextOptions<QuestboardDbContext> options) : base(options)
         {
+
         }
+
+        
+
 
         public DbSet<JobTask> JobsAndTasks { get; set; }
         public DbSet<Subtask> Subtask { get; set; }
