@@ -9,7 +9,7 @@
     {
         <div class="py-2 mb-2 siteHeader d-flex">
             <div class="container">
-                <h2>@Model.ProjectName: @Model.Name</h2>
+                <h2>@Model.ProjectName / @Model.Name</h2>
             </div>
 
             <div>
@@ -86,20 +86,21 @@
 
             </div>
 
-            <div class="mb-3 main rounded-box">
+            <div class="mb-3 main ">
                 <h2 class="mb-3" >Subtasks</h2>
                 <input hidden id="deletedSubtasks" name="DeletedSubtaskIds"  />
                 <div id="subtask-container">
                 @for(var i = 0; i < Model.Subtasks.Count; i++)
                 {
-                        <div class="mb-2" data-subtask-id="@Model.Subtasks[i].Id">
+                        <div class="mb-5 d-flex" data-subtask-id="@Model.Subtasks[i].Id">
                             <input type="hidden" name="Subtasks[@i].Id" value="@Model.Subtasks[i].Id" />
-                                <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control " value="@Model.Subtasks[i].Name" />
-                            <input class="form-check-input" type="checkbox" id="visible" asp-for="Subtasks[i].IsCompleted">
-                            <label class="form-check-label">
-                                Is Completed?
+                            <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control text-light me-3 " value="@Model.Subtasks[i].Name" />
+                            <input class="form-check-input mt-3 me-1" type="checkbox" id="visible" asp-for="Subtasks[i].IsCompleted">
+                                <label class="form-check-label mt-3 me-3">
+                                Completed?
                             </label>
                                 <button type="button" class="btn btn-success btn-sm remove-subtask mt-3">X</button>
+
                         </div>
                 }
                 </div>
@@ -138,11 +139,11 @@
 
             let index = container.children.length;
             let subtaskHtml = `
-                <div class="mb-2">
-                    <input type="text" style="background:  #0d1117; color: white;" name="Subtasks[${index}].Name" class="form-control" placeholder="Subtask Name" />
-                    <input class="form-check-input" type="checkbox" name="Subtasks[${index}].IsCompleted" value="true">
-                            <label class="form-check-label">Is Completed?</label>
-                    <button type="button" class="btn btn-success btn-sm" onclick="this.parentElement.remove()">X</button>
+                <div class="mb-5 d-flex">
+                    <input type="text" style="background:  #0d1117; color: white;" name="Subtasks[${index}].Name" class="form-control me-3" placeholder="Subtask Name" />
+                    <input class="form-check-input mt-3 me-1" type="checkbox" name="Subtasks[${index}].IsCompleted" value="true">
+                            <label class="form-check-label mt-3 me-3">Completed?</label>
+                    <button type="button" class="btn btn-success btn-sm mt-3" onclick="this.parentElement.remove()">X</button>
                 </div>
             `;
             container.insertAdjacentHTML("beforeend", subtaskHtml);
@@ -163,3 +164,4 @@
         });
     </script>
 }
+

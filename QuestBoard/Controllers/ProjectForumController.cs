@@ -42,6 +42,7 @@ namespace QuestBoard.Controllers
             ForumThreadsContainerViewModel forumThreadsContainerViewModel = new ForumThreadsContainerViewModel
             {
                 ProjectId = currentProject.Id,
+                Project = currentProject,
                 ForumThreads = ForumThreads,
 
             };

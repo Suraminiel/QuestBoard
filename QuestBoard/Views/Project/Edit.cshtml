@@ -49,23 +49,29 @@
         {
         
         <div class="statusPageHeader mb-3">
-            
-                <div class="mb-3">
-                    <label class="form-label" >Name</label>
-                    <input type="text" class="form-control bg-dark text-light" id="name_input" asp-for="Name"/>
-                    <input type="hidden" class="form-control bg-dark text-light" id="id" asp-for="Id" />
-                </div>
+                <div id="editSection" style="display: none;" >
+                    <div class="mb-3">
+                        <label class="form-label" >Name</label>
+                        <input type="text" class="form-control bg-dark text-light" id="name_input" asp-for="Name"/>
+                        <input type="hidden" class="form-control bg-dark text-light" id="id" asp-for="Id" />
+                    </div>
                 
-                <div class="mb-3">
-                    <label class="form-label">Short Description</label>
-                    <input type="text" class=" form-control bg-dark text-light" id="shortDescription-input" asp-for="shortDescription" /> 
+                    <div class="mb-3">
+                        <label class="form-label">Short Description</label>
+                        <input type="text" class=" form-control bg-dark text-light" id="shortDescription-input" asp-for="shortDescription" /> 
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input type="text" class=" form-control bg-dark text-light" id="description-input" asp-for="Description" />
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <input type="text" class=" form-control bg-dark text-light" id="description-input" asp-for="Description" />
+                <div id="showDescriptionSection" style="display:block;" >
+                    <h2 class="form-label">Description</h2>
+                    <div class="text-light mb-3"  >@Model.Description </div>   
                 </div>
-               
+                <a class="text-success" onclick="showEditSection('editSection', 'showDescriptionSection')">Edit</a>
         </div>
        
         <div class="statusPageSidebar " >
@@ -217,7 +223,7 @@
 
             </table>
 
-            <a class="btn me-3 mt-3 bg-success text-dark @(!Model.isAdmin ? "admin-disabled" : "")"
+            <a class="btn me-3 mt-3 bg-success text-light @(!Model.isAdmin ? "admin-disabled" : "")"
                asp-area=""
                asp-route-projectId="@Model.Id"
                asp-controller="Quest"
@@ -245,5 +251,13 @@
           skin: "oxide-dark",
           content_css: "dark"
         });
+
+        function showEditSection(n, m){
+            x = document.getElementById(n);
+            x.style.display = (x.style.display === 'none') ? 'block' : 'none';
+
+            y = document.getElementById(m);
+            y.style.display = (y.style.display === 'none') ? 'block': 'none'; 
+        }
     </script>
 }

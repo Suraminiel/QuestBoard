@@ -158,7 +158,7 @@ footer {
 
 /* Wenn der Benutzer eine Option ausgew‰hlt hat */
 select option:checked {
-    background-color: turquoise; /* Beispiel: blaue Hintergrundfarbe */
+    background-color: grey; /* Beispiel: blaue Hintergrundfarbe */
     color: black; /* Textfarbe weiﬂ */
 }
 

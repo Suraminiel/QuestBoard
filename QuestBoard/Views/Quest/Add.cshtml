@@ -5,17 +5,29 @@
 @{
 }
 
-<div class="py-2 mb-5" id="siteHeader">
-    <div class="container">
-        <h2>New Task</h2>
-    </div>
-</div>
 
-<div class="container">
+<div class="py-2 mb-2 siteHeader d-flex">
+    <div class="container">
+        <h2>@Model.project.Name / New Task</h2>
+    </div>
+
+    <div>
+        <a class="btn btn-success me-1" style="border-radius: 0;" asp-area=""
+           asp-controller="Project"
+           asp-action="Edit"
+           asp-route-id="@Model.projectId">
+            Back
+        </a>
+    </div>
+
+</div>
+ <form method="post">
+<div class="container statusPageContainer">
     @if (Model != null)
     {
         <!--maincontainer -->
-        <form method="post">
+        <div class="statusPageHeader">
+       
             <div class="mb-3 mt-3">
                 <label class="form-label">Task Name</label>
                 <input type="text" class="form-control  bg-dark text-light" id="name" asp-for="Name" />
@@ -26,20 +38,13 @@
                 <input type="text" class="form-control bg-dark text-light" id="description" asp-for="Description" />
             </div>
             <div class="mb-3">
-                <label class="form-label">Type</label>
-                <input type="text" class="form-control bg-dark text-light" id="type" asp-for="Deadline" />
+                <label class="form-label">Deadline</label>
+                <input type="date" class="form-control bg-dark text-light" id="type" value="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Deadline" />
             </div>
+        </div>
+            
 
-            <!-- add Subtasks -->
-            <div class="mb-3">
-                <label class="form-label">Subtask</label>
-                <div id="subtask-container">
-
-                </div>
-                <button type="button" class="btn btn-secondary mb-3" id="add-subtask">Add Subtask</button>
-            </div>
-           
-
+        <div class="statusPageSidebar">
             <div class="mb-3">
                 <label class="form-label ">Tags</label>
                 <select class="form-select bg-dark text-light"
@@ -49,17 +54,17 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Published Date</label>
-                <input type="date" class="form-control bg-dark text-light" id="publishedDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="PublishedDate" />
+                <label class="form-label">Creation Date</label>
+                <input type="date" class="form-control bg-dark text-light" id="publishedDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="PublishedDate" readonly />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Author</label>
-                <input type="text" class="form-control bg-dark text-light" id="author" asp-for="Author" />
+                    <input type="text" class="form-control bg-dark text-light" id="author" value="@User?.Identity?.Name" asp-for="Author" readonly/>
             </div>
             <div class="form-group">
                 <label for="Priority">Priority</label>
-                <select name="Priority" class="form-control" asp-for="Priority">
+                <select name="Priority" class="form-control bg-dark text-light" asp-for="Priority">
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
@@ -68,7 +73,15 @@
             <div class="mt-3">
                 <button class="btn btn-success type="submit">Save</button>
             </div>
-        </form>
+        </div>
+
+            <!-- add Subtasks -->
+            <div class="mb-3 main">
+                <label class="form-label">Subtask</label>
+                <div id="subtask-container">
+                </div>
+                <button type="button" class="btn btn-success mb-3" id="add-subtask">Add Subtask</button>
+            </div>
     }
     else
     {
@@ -76,7 +89,7 @@
     }
 
 </div>
-
+</form>
 @section Scripts {
     <script>
             document.getElementById("add-subtask").addEventListener("click", function() {
@@ -84,9 +97,9 @@
 
             let index = container.children.length;
             let subtaskHtml = `
-                <div class="mb-2">
-                    <input type="text" name="Subtasks[${index}].Name" class="form-control" placeholder="Subtask Name" />
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">X</button>
+                <div class="mb-2 d-flex">
+                    <input type="text" name="Subtasks[${index}].Name" class="form-control bg-dark text-light me-3 mb-3" placeholder="Subtask Name" />
+                    <button type="button" class="btn btn-success btn-sm  mb-3" onclick="this.parentElement.remove()">X</button>
                 </div>
             `;
             container.insertAdjacentHTML("beforeend", subtaskHtml);

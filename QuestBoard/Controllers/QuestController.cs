@@ -33,10 +33,16 @@ namespace QuestBoard.Controllers
         public async Task<IActionResult> Add(Guid projectId)
         {
             var tag = await tagRepository.GetAllAsync();
+            var currentProject = await projectRepository.GetAsync(projectId);
+            if(tag == null || currentProject == null)
+            {
+                return BadRequest();
+            }
             var model = new AddTaskRequest
             {
-                Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString()}),
-                projectId = projectId
+                Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString() }),
+                projectId = projectId,
+                project = currentProject
             };
             return View(model);
         }
@@ -55,7 +61,7 @@ namespace QuestBoard.Controllers
             {
                 Name = addTaskRequest.Name,
                 Description = addTaskRequest.Description,
-                Subtasks = addTaskRequest.Subtasks.Select(s => new Subtask {Name = s.Name }).ToList(),
+                Subtasks = addTaskRequest.Subtasks?.Select(s => new Subtask {Name = s.Name }).ToList() ?? new List<Subtask>() ,
                 Deadline = addTaskRequest.Deadline,
                 PublishedDate = addTaskRequest.PublishedDate,
                 Author = addTaskRequest.Author,

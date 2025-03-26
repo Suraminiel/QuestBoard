@@ -20,6 +20,7 @@ namespace QuestBoard.Models.ViewModes
         public string[] SelectedTags { get; set; } = Array.Empty<string>();
 
         public Guid projectId { get; set; }
+        public Projects project { get; set; }
 
     }
 }
