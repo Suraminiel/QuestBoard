@@ -58,6 +58,7 @@ namespace QuestBoard.Controllers
             {
                 Name = addProjectRequest.Name,
                 shortDescription = addProjectRequest.shortDescription,
+                Description = "Click 'Edit' to write a project description."
             };
 
 

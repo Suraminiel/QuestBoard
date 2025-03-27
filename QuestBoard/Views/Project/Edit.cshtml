@@ -67,9 +67,9 @@
                     </div>
                 </div>
 
-                <div id="showDescriptionSection" style="display:block;" >
-                    <h2 class="form-label">Description</h2>
-                    <div class="text-light mb-3"  >@Model.Description </div>   
+                <div  id="showDescriptionSection" style="display:block;" >
+                   <!-- <h2 class="form-label">Description</h2>-->
+                    <div class="text-light mb-3"  >@Html.Raw( Model.Description) </div>   
                 </div>
                 <a class="text-success" onclick="showEditSection('editSection', 'showDescriptionSection')">Edit</a>
         </div>

@@ -94,7 +94,7 @@
                 {
                         <div class="mb-5 d-flex" data-subtask-id="@Model.Subtasks[i].Id">
                             <input type="hidden" name="Subtasks[@i].Id" value="@Model.Subtasks[i].Id" />
-                            <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control text-light me-3 " value="@Model.Subtasks[i].Name" />
+                            <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control bg-dark text-light me-3 " value="@Model.Subtasks[i].Name" />
                             <input class="form-check-input mt-3 me-1" type="checkbox" id="visible" asp-for="Subtasks[i].IsCompleted">
                                 <label class="form-check-label mt-3 me-3">
                                 Completed?
