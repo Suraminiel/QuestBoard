@@ -194,3 +194,24 @@ select option:checked {
     border-radius: 50%;
     object-fit: cover; /* Verhindert Verzerrungen */
 }
+
+/*#####################################LandingPage#######################################*/
+.landingPage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr 1fr;
+    row-gap: 300px;
+   
+}
+
+.landingPageHeader {
+    grid-column: 1 / -1;
+    margin-top: 50px;
+    margin-bottom: -200px;
+}
+
+img {
+    max-width: 500px;
+    height: auto;
+    
+}
