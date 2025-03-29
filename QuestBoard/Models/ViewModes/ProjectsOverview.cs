@@ -8,6 +8,10 @@ namespace QuestBoard.Models.ViewModes
         public string Name { get; set; }
         public string shortDescription { get; set; }
 
+        public DateTime? creationTime { get; set; }
+
+        public string creator { get; set; }
+
         
     }
 }

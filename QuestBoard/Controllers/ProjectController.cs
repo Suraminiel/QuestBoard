@@ -7,6 +7,7 @@ using QuestBoard.Repositories;
 using System.Collections;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Ganss.Xss;
 
 namespace QuestBoard.Controllers
 {
@@ -30,15 +31,28 @@ namespace QuestBoard.Controllers
             Guid CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             IEnumerable<Projects>? projects = await projectRepository.GetAllForThisUserAsync(CurrentUserID);
             
+            
+            
+
             List<ProjectsOverview> projectsOverviews = new List<ProjectsOverview>();
 
             foreach(var project in projects)
             {
+                var creatorID = project.AdminUserRights[0];
+                var AppUserCreator = await appUserRepository.GetAsync(creatorID);
+
+                if (AppUserCreator == null)
+                {
+                    return BadRequest();
+                }
+
                 projectsOverviews.Add(new ProjectsOverview
                 {
                     Id = project.Id,
                     Name = project.Name,
                     shortDescription = project.shortDescription,
+                    creator = AppUserCreator.Name,
+                    creationTime= project.CreatedDate,
                 });
             }
 
@@ -58,7 +72,8 @@ namespace QuestBoard.Controllers
             {
                 Name = addProjectRequest.Name,
                 shortDescription = addProjectRequest.shortDescription,
-                Description = "Click 'Edit' to write a project description."
+                Description = "Click 'Edit' to write a project description.",
+                CreatedDate = DateTime.UtcNow,
             };
 
 
@@ -203,13 +218,15 @@ namespace QuestBoard.Controllers
 
             // get current project from database
             var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
-
+            var sanitizer = new HtmlSanitizer();
+            
             if (currentProject != null)
             {
 
                 currentProject.Name = editProjectRequest.Name;
-                currentProject.shortDescription = editProjectRequest.shortDescription;
-                currentProject.Description = editProjectRequest.Description;
+                currentProject.shortDescription = sanitizer.Sanitize(editProjectRequest.shortDescription);
+               
+                currentProject.Description = sanitizer.Sanitize(editProjectRequest.Description);
 
                 // loop through editprojectusers and add Id with adminrights to currenproject.AdminUserRights
                 foreach (var users in editProjectRequest.Users)
