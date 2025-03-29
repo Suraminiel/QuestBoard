@@ -198,12 +198,15 @@ select option:checked {
 /*#####################################LandingPage#######################################*/
 .landingPage {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr 1fr;
     row-gap: 300px;
-   
 }
-
+@media (min-width: 768px) {
+    .landingPage {
+       
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr 1fr 1fr;
+    }
+}
 .landingPageHeader {
     grid-column: 1 / -1;
     margin-top: 50px;
