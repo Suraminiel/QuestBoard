@@ -23,9 +23,26 @@ namespace QuestBoard.Controllers
             return View();
         }
 
+        private void ValidateAddTagRequest(AddTagRequest addTagRequest)
+        {
+            if(addTagRequest.Name != null && addTagRequest != null)
+            {
+                if(addTagRequest.Name == addTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError("DisplayName", "Name cannot be the same as DisplayName");
+                }
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTag(AddTagRequest addTagRequest)
         {
+            ValidateAddTagRequest(addTagRequest);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            
             // Mapping AddTagRequest to Tag Domain Model
             var tag = new Tag
             {

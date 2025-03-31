@@ -15,11 +15,13 @@
         <form method="post">
             <div class="mb-3 mt-3">
                 <label class="form-label">Project Name</label>
-                <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" />
+                <input type="text" class="form-control bg-dark text-light" id="name" asp-for="Name" required />
+                <span class="text-danger" asp-validation-for="Name"></span>
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label">Short Description</label>
-                <input type="text" class="form-control bg-dark text-light" id="description" asp-for="shortDescription" />
+                <input type="text" class="form-control bg-dark text-light" id="description" asp-for="shortDescription" required />
+            <span class="text-danger" asp-validation-for="shortDescription"></span>
             </div>
 
            

@@ -4,6 +4,20 @@
 *@
 @{
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger  alert-dismissible fade show">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <div class="py-2 mb-2 siteHeader d-flex">
     <div class="container">
@@ -35,18 +49,21 @@
         <form action="/Account/ProfilSettings" method="post">
             <div class="mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" class="form-control bg-dark text-light" asp-for="name" id="Name" />
+                <span class="text-danger" asp-validation-for="name"></span>
+                <input type="text" class="form-control bg-dark text-light" asp-for="name" id="Name" required />
                 <input type="hidden" class="form-control bg-dark text-light" asp-for="id" id="id" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="text" class="form-control bg-dark text-light" asp-for="email" id="Email" />
+                <span class="text-danger" asp-validation-for="email"></span>
+                <input type="text" class="form-control bg-dark text-light" asp-for="email" id="Email" required />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control bg-dark text-light mb-3" " asp-for="password" id="Password" />
+                <span class="text-danger" asp-validation-for="password"></span>
+                <input type="password" class="form-control bg-dark text-light mb-3"  asp-for="password" id="Password" required />
                 <label class="form-label">New Password</label>
                 <input type="password" class="form-control bg-dark text-light mb-3" " asp-for="newPassword" id="newPassword" />
                 <label class="form-label">New Password Confirmation</label>

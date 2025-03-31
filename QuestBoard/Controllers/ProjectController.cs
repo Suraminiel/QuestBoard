@@ -8,6 +8,7 @@ using System.Collections;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Ganss.Xss;
+using Microsoft.IdentityModel.Tokens;
 
 namespace QuestBoard.Controllers
 {
@@ -68,6 +69,11 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddProjectRequest addProjectRequest)
         {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
             Projects model = new Projects
             {
                 Name = addProjectRequest.Name,
@@ -215,7 +221,10 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditProjectRequest editProjectRequest)
         {
-
+            if( editProjectRequest.Name.IsNullOrEmpty() || editProjectRequest.shortDescription.IsNullOrEmpty() )
+            {
+                return RedirectToAction("Edit", new {id = editProjectRequest.Id });
+            }
             // get current project from database
             var currentProject = await projectRepository.GetAsync(editProjectRequest.Id);
             var sanitizer = new HtmlSanitizer();
@@ -253,6 +262,7 @@ namespace QuestBoard.Controllers
 
                 if (saveCurrentProject != null)
                 {
+                    TempData["SuccessMessage"] = "Saved Changes!";
                     return RedirectToAction("Edit", new { id = editProjectRequest.Id });
                 }
 

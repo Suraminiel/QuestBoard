@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
@@ -78,6 +79,11 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> AddThread(ForumThreadsContainerViewModel forumThreadsContainerViewModel)
         {
+            if (forumThreadsContainerViewModel.newMessage.name.IsNullOrEmpty() || forumThreadsContainerViewModel.newMessage.message.IsNullOrEmpty()) 
+            {
+                return RedirectToAction("List", new { ProjectId = forumThreadsContainerViewModel.ProjectId });
+            }
+
             var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var AppUser = await appUserRepository.GetAsync(Guid.Parse(UserId));
 
@@ -163,6 +169,11 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPost(ForumPostViewModel forumPostViewModel)
         {
+            if (forumPostViewModel.newMessage.IsNullOrEmpty())
+            {
+                return RedirectToAction("ShowThread", new { ProjectId = forumPostViewModel.ProjectId, ThreadId = forumPostViewModel.ThreadId });
+            }
+
             var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var AppUser = await appUserRepository.GetAsync(Guid.Parse(UserId));
 

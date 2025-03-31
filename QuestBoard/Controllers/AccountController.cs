@@ -35,40 +35,44 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-            var identityUser = new IdentityUser
+            if(ModelState.IsValid)
             {
-                UserName = registerViewModel.Username,
-                Email = registerViewModel.Email,
-            };
-            
-            var identityResult = await userManager.CreateAsync(identityUser, registerViewModel.Password);
-
-            if (identityResult.Succeeded)
-            {
-
-                // Zugriff auf die ID des SuperAdmins
-                var userId = identityUser.Id;
-
-                var AppUserProfile = new AppUser
+                var identityUser = new IdentityUser
                 {
-                    Id = Guid.Parse(userId),
-                    Name = identityUser.UserName,
-                    ProfilePicturePath = "/files/images/DefaultPicxcfInvert.png"
+                    UserName = registerViewModel.Username,
+                    Email = registerViewModel.Email,
                 };
 
-                // Seed AppUser Table with SuperAdmin ID
-                var appUserResult = appUserRepository.AddAsync(AppUserProfile);
+                var identityResult = await userManager.CreateAsync(identityUser, registerViewModel.Password);
 
-                
-
-                var roleIdentityResult = await userManager.AddToRoleAsync(identityUser, "User");
-
-                if (roleIdentityResult.Succeeded)
+                if (identityResult.Succeeded)
                 {
-                    var signInResult = await signInManager.PasswordSignInAsync(registerViewModel.Username, registerViewModel.Password, false, false);
-                    return RedirectToAction("Index", "Home");
+
+                    // Zugriff auf die ID des SuperAdmins
+                    var userId = identityUser.Id;
+
+                    var AppUserProfile = new AppUser
+                    {
+                        Id = Guid.Parse(userId),
+                        Name = identityUser.UserName,
+                        ProfilePicturePath = "/files/images/DefaultPicxcfInvert.png"
+                    };
+
+                    // Seed AppUser Table with SuperAdmin ID
+                    var appUserResult = appUserRepository.AddAsync(AppUserProfile);
+
+
+
+                    var roleIdentityResult = await userManager.AddToRoleAsync(identityUser, "User");
+
+                    if (roleIdentityResult.Succeeded)
+                    {
+                        var signInResult = await signInManager.PasswordSignInAsync(registerViewModel.Username, registerViewModel.Password, false, false);
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
+           
             return View();
         }
 
@@ -85,6 +89,11 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult>Login(LoginViewModel loginViewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var signInResult = await signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
 
             if (signInResult != null && signInResult.Succeeded)
@@ -112,9 +121,7 @@ namespace QuestBoard.Controllers
             return View();
         }
 
-        [Authorize(Roles = "User")]
-        [HttpGet]
-        public async Task<IActionResult> ProfilSettings()
+        private async Task<AccountData> createAccountDataViewModel()
         {
             //appUserRepository
             Guid CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -142,6 +149,14 @@ namespace QuestBoard.Controllers
                 profilPicturePath = uploadPath,
             };
 
+            return accountData;
+        }
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<IActionResult> ProfilSettings()
+        {
+            var accountData = await createAccountDataViewModel();
+
             return View(accountData);
         }
 
@@ -150,7 +165,12 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> ProfilSettings(AccountData accountData)
         {
-           
+           if(!ModelState.IsValid)
+            {
+                var model = await createAccountDataViewModel();
+
+                return View(model);
+            }
 
             var currentUser = await userManager.FindByIdAsync(accountData.id.ToString());
             var appUserProfil = await appUserRepository.GetAsync(Guid.Parse(currentUser.Id));
@@ -206,9 +226,12 @@ namespace QuestBoard.Controllers
             }
             else 
             {
-                return BadRequest("wrong pw");
+                TempData["ErrorMessage"] = "Wrong password!";
+                // return BadRequest("wrong pw");
+                return RedirectToAction("ProfilSettings");
             }
 
+            TempData["SuccessMessage"] = "Changes Saved!";
             return RedirectToAction("ProfilSettings");    
         }
 

@@ -92,13 +92,13 @@
                 <input type="hidden" class="form-control bg-dark text-light" id="newThreadName_input" asp-for="ProjectId" />
                 <div class="mb-3">
                     <label>Thread Name</label>
-                    <input type="text" class="form-control bg-dark text-light" id="newThreadName_input" asp-for="newMessage.name"/>
+                    <input type="text" class="form-control bg-dark text-light" id="newThreadName_input" asp-for="newMessage.name" required/>
                 </div>
             
                 <div class="mb-3">
                     <label>Message</label>
                    
-                    <textarea type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" asp-for="newMessage.message"></textarea> 
+                    <textarea type="text" class="form-control bg-dark text-light" id="newThreadMessage_input" asp-for="newMessage.message" required></textarea> 
                 </div>
            
 

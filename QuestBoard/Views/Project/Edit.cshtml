@@ -7,6 +7,15 @@
 @{
 
 }
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMsg" class="alert alert-success alert-dismissible fade show">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <form method="post"> 
 <div class="py-2 mb-2 siteHeader d-flex" >
     <div class="container">

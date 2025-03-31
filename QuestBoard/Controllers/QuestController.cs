@@ -10,6 +10,7 @@ using System.Security.Claims;
 using QuestBoard.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Azure;
 
 namespace QuestBoard.Controllers
 {
@@ -55,6 +56,18 @@ namespace QuestBoard.Controllers
             if (project == null)
             {
                 return NotFound("Projekt nicht gefunden.");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                var tag = await tagRepository.GetAllAsync();
+                var model = new AddTaskRequest
+                {
+                    Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString() }),
+                    projectId = project.Id,
+                    project = project,
+                };
+                return View(model);
             }
             // Map viewModel to DomainModel
             var JobTask = new JobTask
@@ -185,11 +198,10 @@ namespace QuestBoard.Controllers
             return View(TaskOverviews);
         }
 
-        [HttpGet]
-        public async Task<IActionResult>Edit(Guid Id)
+        private async Task<EditTaskRequest> createEditView(Guid TaskId)
         {
-            var taskJob = await questboardTaskRepository.GetAsync(Id);
-           
+            var taskJob = await questboardTaskRepository.GetAsync(TaskId);
+
             var tagsDomainModel = await tagRepository.GetAllAsync();
 
             if (taskJob != null && tagsDomainModel != null)
@@ -216,7 +228,7 @@ namespace QuestBoard.Controllers
                             Value = x.Id.ToString()
                         }),
                         SelectedTags = taskJob.Tags.Select(x => x.Id.ToString()).ToArray(),
-                      
+
                         Users = currentProject.Users.ToList().Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                         {
                             Text = x.Name,
@@ -230,20 +242,40 @@ namespace QuestBoard.Controllers
 
                     };
 
-                    // Prüfen, ob der aktuelle User Teil der Task ist oder projektadmin ist
-
-
-                    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-
                     
 
+                    return model;
+                }
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Edit(Guid Id)
+        {
+            var taskJob = await questboardTaskRepository.GetAsync(Id);
+           
+            var tagsDomainModel = await tagRepository.GetAllAsync();
+
+            if (taskJob != null && tagsDomainModel != null)
+            {
+                var currentProject = await projectRepository.GetAsync(taskJob.ProjectId);
+                var model = await createEditView(Id);
+                
+                if (currentProject != null && model != null)
+                {
+               
+                    // Prüfen, ob der aktuelle User Teil der Task ist oder projektadmin ist
+                    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+ 
                     if (!taskJob.Users.Any(u => u.Id.ToString() == currentUserId) &&  !currentProject.AdminUserRights.Contains(Guid.Parse(currentUserId)))
                     {
                         return Forbid();
                     }
 
-                    return View(model);
+                     return View(model);
+                   
                 }
             }
 
@@ -253,6 +285,11 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditTaskRequest editTaskRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                var model = await createEditView(editTaskRequest.Id);
+                return View(model);
+            }
             var JobTaskDomainModel = new JobTask
             {
                 Id = editTaskRequest.Id,
@@ -303,9 +340,13 @@ namespace QuestBoard.Controllers
             if (updatedJobTask != null)
             {
                 // show success notification
+                TempData["SuccessMessage"] = "Saved Changes!";
+
                 return RedirectToAction("Edit");
+               // return RedirectToAction("Edit", "Project", new { Id = editTaskRequest.ProjectId });
             }
             // show error notification
+            TempData["ErrorMessage"] = "Failed to Save Changes!";
             return RedirectToAction("Edit");
         }
 
