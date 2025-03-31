@@ -135,7 +135,8 @@
                 <button type="submit" class="btn btn-danger ms-2"
                         asp-area=""
                         asp-controller="Quest"
-                        asp-action="Delete">
+                        asp-action="Delete"
+                            onclick="return confirm('Willst du diese Aufgabe wirklich löschen?');">
                     Delete
                 </button>
             </div>
@@ -159,7 +160,7 @@
             let index = container.children.length;
             let subtaskHtml = `
                 <div class="mb-5 d-flex">
-                    <input type="text" style="background:  #0d1117; color: white;" name="Subtasks[${index}].Name" class="form-control me-3" placeholder="Subtask Name" />
+                    <input type="text" style="background:  #0d1117; color: white;" name="Subtasks[${index}].Name" class="form-control bg-dark me-3" placeholder="Subtask Name" />
                     <input class="form-check-input mt-3 me-1" type="checkbox" name="Subtasks[${index}].IsCompleted" value="true">
                             <label class="form-check-label mt-3 me-3">Completed?</label>
                     <button type="button" class="btn btn-success btn-sm mt-3" onclick="this.parentElement.remove()">X</button>

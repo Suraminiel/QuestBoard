@@ -340,7 +340,7 @@ namespace QuestBoard.Controllers
             if (updatedJobTask != null)
             {
                 // show success notification
-                TempData["SuccessMessage"] = "Saved Changes!";
+                TempData["SuccessMessage"] = "Changes have been saved!";
 
                 return RedirectToAction("Edit");
                // return RedirectToAction("Edit", "Project", new { Id = editTaskRequest.ProjectId });

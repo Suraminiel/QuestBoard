@@ -262,7 +262,7 @@ namespace QuestBoard.Controllers
 
                 if (saveCurrentProject != null)
                 {
-                    TempData["SuccessMessage"] = "Saved Changes!";
+                    TempData["SuccessMessage"] = "Changes have been saved!";
                     return RedirectToAction("Edit", new { id = editProjectRequest.Id });
                 }
 

@@ -11,6 +11,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
+@if (TempData["InvalidPassword"] != null)
+{
+    <div class="alert alert-danger  alert-dismissible fade show">
+        @TempData["InvalidPassword"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show">
@@ -18,6 +25,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
+
+
 
 <div class="py-2 mb-2 siteHeader d-flex">
     <div class="container">
@@ -65,7 +74,8 @@
                 <span class="text-danger" asp-validation-for="password"></span>
                 <input type="password" class="form-control bg-dark text-light mb-3"  asp-for="password" id="Password" required />
                 <label class="form-label">New Password</label>
-                <input type="password" class="form-control bg-dark text-light mb-3" " asp-for="newPassword" id="newPassword" />
+                <input type="password" class="form-control bg-dark text-light mb-3"  asp-for="newPassword" id="newPassword" />
+                
                 <label class="form-label">New Password Confirmation</label>
                 <input type="password" class="form-control bg-dark text-light" asp-for="newPasswordConfirm" id="newPasswordConfirm" />
             </div>

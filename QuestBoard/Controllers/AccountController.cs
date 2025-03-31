@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuestBoard.Models.Domain;
 using QuestBoard.Models.ViewModes;
 using QuestBoard.Repositories;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace QuestBoard.Controllers
@@ -16,8 +17,9 @@ namespace QuestBoard.Controllers
         private readonly IAppUserRepository appUserRepository;
         private readonly IProjectRepository projectRepository;
         private readonly IQuestboardTaskRepository questboardTaskRepository;
+        private readonly IPasswordValidator<IdentityUser> passwordValidator;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAppUserRepository appUserRepository, IProjectRepository projectRepository, IQuestboardTaskRepository questboardTaskRepository , IPasswordValidator<IdentityUser> passwordValidator)
             : base(signInManager)
         {
             this.userManager = userManager;
@@ -25,6 +27,7 @@ namespace QuestBoard.Controllers
             this.appUserRepository = appUserRepository;
             this.projectRepository = projectRepository;
             this.questboardTaskRepository = questboardTaskRepository;
+            this.passwordValidator = passwordValidator;
         }
         [HttpGet]
         public IActionResult Register()
@@ -165,6 +168,7 @@ namespace QuestBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> ProfilSettings(AccountData accountData)
         {
+           bool validPW = true;
            if(!ModelState.IsValid)
             {
                 var model = await createAccountDataViewModel();
@@ -191,15 +195,41 @@ namespace QuestBoard.Controllers
             if (authorized)
             {
 
+                
+                var currentUserName = currentUser.UserName;
+                var currentEmail = currentUser.Email;
 
                 currentUser.Email = accountData.email;
                 currentUser.UserName = accountData.name;
+
+                var usernameValidator = new UserValidator<IdentityUser>();
+                var userNameResult = await usernameValidator.ValidateAsync(userManager, currentUser);
+                if (!userNameResult.Succeeded)
+                {
+                    currentUser.UserName = currentUserName;
+                }
+
+                var emailValidator = new EmailAddressAttribute();
+                if(!emailValidator.IsValid(currentUser.Email))
+                {
+                    currentUser.Email = currentEmail;
+                }
 
                 if (accountData.newPassword != null &&  
                     accountData.newPasswordConfirm != null &&
                     accountData.newPassword == accountData.newPasswordConfirm)
                 {
-                    currentUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(currentUser, accountData.newPassword);
+                   //Validate new password
+                   var validationResult = await passwordValidator.ValidateAsync(userManager, currentUser, accountData.newPassword);
+                    if (validationResult.Succeeded)
+                    {
+                        currentUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(currentUser, accountData.newPassword);
+                    }
+                    else 
+                    {
+                        TempData["InvalidPassword"] = "The password must be at least 6 characters long and contain a number, an uppercase and lowercase letter, as well as a special character.";
+                        validPW = false;
+                    }
                 }
 
                 // superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "Superadmin@123");
@@ -226,12 +256,13 @@ namespace QuestBoard.Controllers
             }
             else 
             {
+                
                 TempData["ErrorMessage"] = "Wrong password!";
                 // return BadRequest("wrong pw");
                 return RedirectToAction("ProfilSettings");
             }
 
-            TempData["SuccessMessage"] = "Changes Saved!";
+            if (validPW) TempData["SuccessMessage"] = "Changes have been saved!"; else TempData["SuccessMessage"] = "Changes were saved except for the password.";
             return RedirectToAction("ProfilSettings");    
         }
 
