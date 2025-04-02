@@ -47,6 +47,7 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IDocumentsRepository, DocumentsRepository>();
 builder.Services.AddScoped<IForumThreadRepository, ForumThreadRepository>();
 builder.Services.AddScoped<IForumPostRepository, ForumPostRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

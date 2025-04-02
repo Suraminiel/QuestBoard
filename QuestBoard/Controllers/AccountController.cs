@@ -35,6 +35,8 @@ namespace QuestBoard.Controllers
             return View();
         }
 
+        
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
@@ -78,6 +80,8 @@ namespace QuestBoard.Controllers
            
             return View();
         }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> Login(string ReturnUrl)
