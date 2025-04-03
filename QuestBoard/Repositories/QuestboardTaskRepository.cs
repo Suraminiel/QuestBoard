@@ -19,6 +19,12 @@ namespace QuestBoard.Repositories
            return jobTask;
         }
 
+        public async Task<int> CountProjectTasksAsync(Guid id)
+        {
+           return await questboardDbContext.JobsAndTasks.Where(jt => jt.ProjectId == id).CountAsync();
+           
+        }
+
         public async Task<JobTask?> DeleteAsync(Guid id)
         {
             var existingJobTask = await questboardDbContext.JobsAndTasks.FindAsync(id);
@@ -77,6 +83,32 @@ namespace QuestBoard.Repositories
         public async Task<IEnumerable<JobTask>> GetAllAsync()
         {
             return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).ToListAsync();
+        }
+
+        public async Task<IEnumerable<JobTask>> GetAllForThisProjectAsync(Guid id, int pageNumber = 1, int pageSize = 100)
+        {
+            var query = questboardDbContext.JobsAndTasks
+                .Where(jt => jt.ProjectId == id)
+                .Include(jt => jt.Subtasks)
+                .Include(jt => jt.Tags)
+                .Include(jt => jt.Users)
+                .AsQueryable();
+
+            //Pagination
+            // Skip 0 Take 5 -> Page 1 of 5 results
+            // Skip 5 Take next 5 -> Page 2 of 5 results
+            var skipResults = (pageNumber-1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
+               
+            return await query.ToListAsync();
+
+            /*
+            return await questboardDbContext.JobsAndTasks
+                .Where(jt => jt.ProjectId == id)
+                .Include(jt => jt.Subtasks)
+                .Include(jt => jt.Tags)
+                .Include (jt => jt.Users)
+                .ToListAsync();*/
         }
 
         public async Task<IEnumerable<JobTask>> GetAllForThisUserAsync(Guid id)

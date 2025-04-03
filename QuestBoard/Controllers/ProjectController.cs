@@ -108,11 +108,32 @@ namespace QuestBoard.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id, int pageSize = 5, int pageNumber = 1)
         {
             var currentProject = await projectRepository.GetAsync(id);
-            
-            if (currentProject != null)
+            var TaskCount = await questboardTaskRepository.CountProjectTasksAsync(id);
+
+            //Pagination
+            var totalJobTasks = TaskCount;
+            var totalPages = Math.Ceiling((decimal)totalJobTasks / pageSize);
+
+            if (pageNumber > totalPages)
+            {
+                pageNumber--;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+
+            ViewBag.TotalPage = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.PageNumber = pageNumber;
+
+            var currentProjectJobTasks = await questboardTaskRepository.GetAllForThisProjectAsync(id, pageNumber, pageSize);
+
+            if (currentProject != null && currentProjectJobTasks != null)
             {
                 
 
@@ -125,7 +146,7 @@ namespace QuestBoard.Controllers
                     //Users = currentProject.Users,
                     AdminUserRights = currentProject.AdminUserRights.ToList(),
                     //Subtasks = taskJob.Subtasks.Select(s => new Subtask { Name = s.Name, Id = s.Id, IsCompleted = s.IsCompleted }).ToList(),
-                    TaskOverviews = currentProject.JobTasks.Select(t => new TaskOverview {
+                    /*TaskOverviews = currentProject.JobTasks.Select(t => new TaskOverview {
                         Priority = t.Priority,
                         Name = t.Name,
                         Id = t.Id,
@@ -136,10 +157,32 @@ namespace QuestBoard.Controllers
                         Deadline = t.Deadline,
                         Tags = t.Tags,
                         Users = t.Users,
-                        Subtasks = t.Subtasks }).ToList(),
+                        Subtasks = t.Subtasks 
+                    }).ToList(),*/
 
 
                 };
+
+                var ProjektTasks_List = new List<TaskOverview>();
+                foreach (var tasks in currentProjectJobTasks)
+                {
+                    ProjektTasks_List.Add(new TaskOverview
+                    {
+                        Priority = tasks.Priority,
+                        Name = tasks.Name,
+                        Id = tasks.Id,
+                        //AdminUserRights = t.AdminUserRights,
+                        Author = tasks.Author,
+                        Description = tasks.Description,
+                        // ProjectId = t.ProjectId,
+                        Deadline = tasks.Deadline,
+                        Tags = tasks.Tags,
+                        Users = tasks.Users,
+                        Subtasks = tasks.Subtasks
+                    });
+                }
+
+                editProject.TaskOverviews = ProjektTasks_List;
 
                 ICollection<AppUserViewModel> Users = new List<AppUserViewModel>();
                 foreach (var users in currentProject.Users)

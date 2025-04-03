@@ -6,6 +6,8 @@ namespace QuestBoard.Repositories
     {
         Task<IEnumerable<JobTask>> GetAllAsync();
         Task<IEnumerable<JobTask>> GetAllForThisUserAsync(Guid id);
+        Task<IEnumerable<JobTask>> GetAllForThisProjectAsync(Guid id, int pageNumber = 1, int pageSize = 100);
+        Task<int> CountProjectTasksAsync(Guid id);
         Task<JobTask?> GetAsync(Guid id);
      //   Task<JobTask?> GetByUrlHandleAsync(string urlHandle);
         Task<JobTask> AddAsync(JobTask jobTask);

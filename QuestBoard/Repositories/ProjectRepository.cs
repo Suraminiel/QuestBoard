@@ -47,12 +47,12 @@ namespace QuestBoard.Repositories
         {
             return await questboardDbContext.Projects
                 .Include(p => p.JobTasks)
-                 .ThenInclude(jt => jt.Subtasks)
+                /* .ThenInclude(jt => jt.Subtasks)
                 .Include(p => p.JobTasks)
                  .ThenInclude(jt => jt.Tags)
-                 .Include(p => p.JobTasks)
-                 .ThenInclude (jt => jt.Users)
-                 .Include(p => p.Users)
+                .Include(p => p.JobTasks)
+                 .ThenInclude (jt => jt.Users)*/
+                .Include(p => p.Users)
                 .FirstOrDefaultAsync(jt => jt.Id == id);
             //return await questboardDbContext.JobsAndTasks.Include(x => x.Tags).Include(st => st.Subtasks).FirstOrDefaultAsync(x => x.Id == id);
         }
