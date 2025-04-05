@@ -299,6 +299,9 @@ namespace QuestBoard.Controllers
                 var model = await createEditView(editTaskRequest.Id);
                 return View(model);
             }
+
+            
+
             var JobTaskDomainModel = new JobTask
             {
                 Id = editTaskRequest.Id,

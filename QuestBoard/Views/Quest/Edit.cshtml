@@ -113,7 +113,7 @@
                 {
                         <div class="mb-5 d-flex" data-subtask-id="@Model.Subtasks[i].Id">
                             <input type="hidden" name="Subtasks[@i].Id" value="@Model.Subtasks[i].Id" />
-                            <input type="text" name="Subtasks[@i].Name" style="background:   #0d1117; color:  grey;" class="form-control bg-dark text-light me-3 " value="@Model.Subtasks[i].Name" />
+                            <input type="text" name="Subtasks[@i].Name"  style="background:   #0d1117; color:  grey;" class="form-control bg-dark text-light me-3 " asp-for="@Model.Subtasks[i].Name" />
                             <input class="form-check-input mt-3 me-1" type="checkbox" id="visible" asp-for="Subtasks[i].IsCompleted">
                                 <label class="form-check-label mt-3 me-3">
                                 Completed?
@@ -154,6 +154,29 @@
  </form>
 @section Scripts {
     <script>
+                    function reindexSubtasks() {
+            let container = document.getElementById("subtask-container");
+            let subtaskElements = container.querySelectorAll(".d-flex");
+
+            subtaskElements.forEach((element, index) => {
+                // Setze neue Namen für Inputs
+                let nameInput = element.querySelector('input[type="text"]');
+                if (nameInput) {
+                    nameInput.name = `Subtasks[${index}].Name`;
+                }
+
+                let checkbox = element.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.name = `Subtasks[${index}].IsCompleted`;
+                }
+
+                let hiddenInput = element.querySelector('input[type="hidden"]');
+                if (hiddenInput) {
+                    hiddenInput.name = `Subtasks[${index}].Id`;
+                }
+            });
+        }
+
             document.getElementById("add-subtask").addEventListener("click", function() {
             let container = document.getElementById("subtask-container");
 
@@ -171,7 +194,8 @@
 
             document.querySelectorAll(".remove-subtask").forEach(button => {
             button.addEventListener("click", function() {
-                let subtaskElement = this.parentElement;
+                //let subtaskElement = this.parentElement;
+                let subtaskElement = event.target.closest(".d-flex");
                 let subtaskId = subtaskElement.getAttribute("data-subtask-id");
 
                 if (subtaskId) {
@@ -180,6 +204,7 @@
                 }
 
                 subtaskElement.remove();
+               // reindexSubtasks();
             });
         });
     </script>

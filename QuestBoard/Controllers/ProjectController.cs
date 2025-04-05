@@ -375,7 +375,7 @@ namespace QuestBoard.Controllers
 
                 foreach (var task in editProject.JobTasks)
                 {
-
+                    
                    var deleteTask = await questboardTaskRepository.DeleteAsync(task.Id);
                     if (deleteTask == null)
                     {

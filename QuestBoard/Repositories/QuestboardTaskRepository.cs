@@ -31,6 +31,10 @@ namespace QuestBoard.Repositories
 
             if (existingJobTask != null)
             {
+                foreach (var subtask in existingJobTask.Subtasks)
+                {
+                    questboardDbContext.Subtask.Remove(subtask);
+                }
                 questboardDbContext.JobsAndTasks.Remove(existingJobTask);
                 await questboardDbContext.SaveChangesAsync();
                 return existingJobTask;
@@ -129,13 +133,24 @@ namespace QuestBoard.Repositories
             // delete subtasks that where deleted by the user
             if (!string.IsNullOrEmpty(deletedSubtasks))
             {
-                var subtasksToDelte = deletedSubtasks.Split(',')
+              /*  var subtasksToDelte =  deletedSubtasks.Split(',')
                     .Where(id => !string.IsNullOrWhiteSpace(id))
                     .Select(Guid.Parse)
-                    .ToList();
+                    .ToList();*/
 
-                var subtaskToRemove = questboardDbContext.Subtask.Where(st => subtasksToDelte.Contains(st.Id));
+            var subtasksToDelte = deletedSubtasks
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(id => Guid.Parse(id))
+            .ToList();
+
+
+
+                var subtaskToRemove = await questboardDbContext.Subtask.Where(st => subtasksToDelte.Contains(st.Id)).ToListAsync();
+
+                
+
                 questboardDbContext.Subtask.RemoveRange(subtaskToRemove);
+                await questboardDbContext.SaveChangesAsync();
             }
 
             //update Task
@@ -158,6 +173,7 @@ namespace QuestBoard.Repositories
 
                     if (exisitingSubtask == null)
                     {
+                        if(subtask.Name != null)
                         existingJobTask.Subtasks.Add(subtask);
                     }
                     else
