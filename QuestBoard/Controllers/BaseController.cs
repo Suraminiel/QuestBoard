@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using QuestBoard.Models.Domain;
 using System.Security.Claims;
 
 namespace QuestBoard.Controllers
@@ -35,6 +36,16 @@ namespace QuestBoard.Controllers
 
                 }
             }
+        }
+
+        public bool hasAdminRights(Projects currentProject)
+        {
+            var CurrentUserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!currentProject.AdminUserRights.Contains(CurrentUserID))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -198,6 +198,15 @@ namespace QuestBoard.Controllers
 
         public async Task<IActionResult> DeleteFile(Guid fileId, Guid ProjectId)
         {
+            var currentProject = await projectRepository.GetAsync(ProjectId);
+            if(currentProject == null)
+            {
+                return NotFound();
+            }
+            if(!hasAdminRights(currentProject))
+            {
+                return RedirectToAction("List", new { projectID = ProjectId });
+            }
 
             try
             {

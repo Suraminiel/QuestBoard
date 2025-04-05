@@ -30,6 +30,9 @@ namespace QuestBoard.Controllers
             this.appUserRepository = appUserRepository;
             this.projectRepository = projectRepository;
         }
+
+       
+
         [HttpGet]
         public async Task<IActionResult> Add(Guid projectId)
         {
@@ -39,6 +42,12 @@ namespace QuestBoard.Controllers
             {
                 return BadRequest();
             }
+
+            if(!hasAdminRights(currentProject))
+            {
+                return RedirectToAction("Edit", "Project", new { id = projectId });
+            }
+
             var model = new AddTaskRequest
             {
                 Tags = tag.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = x.Name, Value = x.Id.ToString() }),

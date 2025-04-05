@@ -207,6 +207,16 @@ namespace QuestBoard.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteThread(Guid threadId, Guid ProjectId)
         {
+            var currentProject = await projectRepository.GetAsync(ProjectId);
+            if (currentProject == null) 
+            {
+                return NotFound();
+            }
+            if (!hasAdminRights(currentProject)) 
+            {
+                return RedirectToAction("List", new { ProjectId = ProjectId });
+            }
+
             var deleted = await forumThreadRepository.DeleteAsync(threadId);
             if (deleted == null)
             {

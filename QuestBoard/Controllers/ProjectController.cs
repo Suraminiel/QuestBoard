@@ -26,6 +26,9 @@ namespace QuestBoard.Controllers
             this.projectRepository = projectRepository;
             this.questboardTaskRepository = questboardTaskRepository;
         }
+
+        
+
         [HttpGet]
         public async Task<IActionResult> List()
         {
@@ -73,6 +76,9 @@ namespace QuestBoard.Controllers
             {
                 return View();
             }
+            
+            
+
 
             Projects model = new Projects
             {
@@ -261,6 +267,8 @@ namespace QuestBoard.Controllers
             return View();
         }
 
+        
+
         [HttpPost]
         public async Task<IActionResult> Edit(EditProjectRequest editProjectRequest)
         {
@@ -275,6 +283,12 @@ namespace QuestBoard.Controllers
             if (currentProject != null)
             {
 
+                // check whether currentUser is allowed to perform this action
+                if(!hasAdminRights(currentProject))
+                {
+                    return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+                }
+                
                 currentProject.Name = editProjectRequest.Name;
                 currentProject.shortDescription = sanitizer.Sanitize(editProjectRequest.shortDescription);
                
@@ -327,6 +341,11 @@ namespace QuestBoard.Controllers
 
             if (currentProject != null)
             {
+                if (!hasAdminRights(currentProject))
+                {
+                    return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+                }
+
                 var editProject = new EditProjectRequest
                 {
                     Name = currentProject.Name,
@@ -396,6 +415,12 @@ namespace QuestBoard.Controllers
             // if possible add invited User to project
             if (newUser != null && currentProject != null)
             {
+
+                if (!hasAdminRights(currentProject))
+                {
+                    return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+                }
+
                 currentProject.Users.Add(newUser);
                var updatedProject = await projectRepository.UpdateAsync(currentProject);
 
@@ -419,7 +444,11 @@ namespace QuestBoard.Controllers
 
             if (currentProject != null && toBeDeletedUser != null)
             {
-               
+                if (!hasAdminRights(currentProject))
+                {
+                    return RedirectToAction("Edit", new { id = editProjectRequest.Id });
+                }
+
                 if (currentProject.Users.Contains(toBeDeletedUser) && currentProject.AdminUserRights.ToList().IndexOf(toBeDeletedUser.Id) != 0)
                 {
                     currentProject.Users.Remove(toBeDeletedUser);
