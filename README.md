@@ -31,3 +31,9 @@ This project uses the following open-source libraries, all licensed under the MI
 - [Bootstrap](https://getbootstrap.com/) – included locally for styling (MIT License)
 - [jQuery](https://jquery.com/) – included as a Bootstrap dependency (MIT License)
 - [TinyMCE](https://www.tiny.cloud/) – loaded via CDN for rich text editing (core under MIT License, other parts under proprietary license)
+
+
+## Licensing
+
+This project is provided without a license. You are free to view, fork, and use it for personal, non-commercial purposes. 
+However, you may not redistribute or modify the code for commercial purposes without obtaining permission from the author.
