@@ -45,6 +45,4 @@ To run this project locally, follow these steps:
 
 The project uses SQL Server for data storage. Make sure SQL Server is installed and running locally or adjust the connection string accordingly.
 
-## Licensing
 
-This project is provided without a formal license. The default copyright laws apply. You may not reproduce, distribute, or create derivative works.
