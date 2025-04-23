@@ -1,20 +1,20 @@
 # Project management tool (ASP.NET)
 
-This project is a personal portfolio project to demonstrate my knowledge of C#, ASP.NET Core and Entity Framework Core. 
-It was developed to implement typical functions of a project management system such as task management, progress display and user management.
+This project is a personal portfolio project designed to demonstrate my knowledge of C#, ASP.NET Core, and Entity Framework Core. 
+It was developed to implement typical project management system features, such as task management, progress tracking, and user management.
 
 ## Project description
 
-The tool offers the following functions:
+This tool offers the following features:
 
-- Creating and managing projects
-- Creating and editing tasks (incl. subtasks)
-- Progress bar for tasks
-- Forum 
-- File upload
-- User management via ASP. NET Identity
-- Data storage with Entity Framework Core and SQL Server
-- HTML input security with HtmlSanitizer
+-Creating and managing projects
+-Creating and editing tasks (including subtasks)
+-Progress bars for tasks
+-Forum functionality
+-File upload capabilities
+-User management with ASP.NET Identity
+-Data storage using Entity Framework Core and SQL Server
+-HTML input sanitization with HtmlSanitizer
 
 ## Third-party libraries
 
