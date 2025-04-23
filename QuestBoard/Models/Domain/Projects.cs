@@ -10,9 +10,7 @@
         public DateTime? CreatedDate { get; set; }
 
         public List<Guid> AdminUserRights { get; set; }
-        public ICollection<AppUser> Users { get; set; }  // aktuell gibt es eine many to many relationship zwischen AppUser und
-                                                         // JobTask. wenn ich Project einfüge, muss das auf many to many von AppUser
-                                                         // zu Projects geändert werden
+        public ICollection<AppUser> Users { get; set; }  
 
         public ICollection<JobTask> JobTasks { get; set; }
 
