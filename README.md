@@ -7,14 +7,14 @@ It was developed to implement typical project management system features, such a
 
 This tool offers the following features:
 
--Creating and managing projects
--Creating and editing tasks (including subtasks)
--Progress bars for tasks
--Forum functionality
--File upload capabilities
--User management with ASP.NET Identity
--Data storage using Entity Framework Core and SQL Server
--HTML input sanitization with HtmlSanitizer
+- Creating and managing projects
+- Creating and editing tasks (including subtasks)
+- Progress bars for tasks
+- Forum functionality
+- File upload capabilities
+- User management with ASP.NET Identity
+- Data storage using Entity Framework Core and SQL Server
+- HTML input sanitization with HtmlSanitizer
 
 ## Third-party libraries
 
