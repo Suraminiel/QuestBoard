@@ -26,3 +26,8 @@ This project uses the following open-source libraries, all licensed under the MI
 - [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools)
 
 
+## Frontend libraries
+
+- [Bootstrap](https://getbootstrap.com/) – included locally for styling (MIT License)
+- [jQuery](https://jquery.com/) – included as a Bootstrap dependency (MIT License)
+- [TinyMCE](https://www.tiny.cloud/) – loaded via CDN for rich text editing (core under MIT License, other parts under proprietary license)
