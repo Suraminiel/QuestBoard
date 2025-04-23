@@ -47,4 +47,4 @@ The project uses SQL Server for data storage. Make sure SQL Server is installed 
 
 ## Licensing
 
-This project is provided without a formal license. You may not reproduce, distribute, or create derivative works.
+This project is provided without a formal license. The default copyright laws apply. You may not reproduce, distribute, or create derivative works.
