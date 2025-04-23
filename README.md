@@ -32,6 +32,18 @@ This project uses the following open-source libraries, all licensed under the MI
 - [jQuery](https://jquery.com/) – included as a Bootstrap dependency (MIT License)
 - [TinyMCE](https://www.tiny.cloud/) – loaded via CDN for rich text editing (core under MIT License, other parts under proprietary license)
 
+## Getting Started
+
+To run this project locally, follow these steps:
+
+1. Clone the repository.
+2. Open the solution in Visual Studio.
+3. In `appsettings.json`, configure the database connection strings under `"QuestboardDbConnectionString" & "QuestboardAuthDbConnectionString"`.
+4. Run the database migrations via the Package Manager Console:
+	- Tools -> NuGetPackageManager -> Package Manager Console: "Update-Database"
+5. Run the project (F5 or `dotnet run`).
+
+The project uses SQL Server for data storage. Make sure SQL Server is installed and running locally or adjust the connection string accordingly.
 
 ## Licensing
 
