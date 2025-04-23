@@ -48,4 +48,4 @@ The project uses SQL Server for data storage. Make sure SQL Server is installed 
 ## Licensing
 
 This project is provided without a license. You are free to view, fork, and use it for personal, non-commercial purposes. 
-However, you may not redistribute or modify the code for commercial or non-commercial purposes without obtaining permission from the author.
+However, you may not redistribute or modify the code for commercial purposes without obtaining permission from the author.
