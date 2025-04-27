@@ -116,31 +116,31 @@ footer {
 }
 
     .styled-table th, .styled-table td {
-        border: 1px solid grey; /* Setzt einen dünnen Rand für jede Zelle */
-        padding: 8px; /* Innenabstand in den Zellen */
-        text-align: left; /* Textausrichtung */
-        border-left: none; /* Entfernt vertikale Ränder (links) */
+        border: 1px solid grey; 
+        padding: 8px; 
+        text-align: left;
+        border-left: none; 
         border-right: none;
     }
 
 .rounded-box {
-    border: 1px solid grey; /* Beispiel für die Farbe des Rahmens */
-    border-radius: 10px; /* Rundet die Ecken */
+    border: 1px solid grey; 
+    border-radius: 10px; 
     padding: 20px;
 }
 
 .custom-link {
-    text-decoration: none; /* Entfernt die Unterstreichung standardmäßig */
-    color: #007bff; /* Setzt die Standard-Schriftfarbe */
+    text-decoration: none; 
+    color: #007bff; 
 }
 
     .custom-link:hover {
-        text-decoration: underline; /* Fügt beim Hover die Unterstreichung hinzu */
-        color: #0056b3; /* Optional: Ändert die Farbe beim Hover */
+        text-decoration: underline; 
+        color: #0056b3; 
     }
 
 
-/* Klasse für das unsichtbare Inputfeld */
+
 .hidden {
     display: none;
 }
@@ -156,43 +156,43 @@ footer {
 }
 
 
-/* Wenn der Benutzer eine Option ausgewählt hat */
+
 select option:checked {
-    background-color: grey; /* Beispiel: blaue Hintergrundfarbe */
-    color: black; /* Textfarbe weiß */
+    background-color: grey; 
+    color: black; 
 }
 
 .custom-placeholder::placeholder {
-    color: #ccc; /* Helle Farbe für dunklen Hintergrund */
-    opacity: 1; /* Standardmäßig ist der Placeholder etwas blasser */
+    color: #ccc;
+    opacity: 1; 
 }
 
 .message-container {
     max-width: 100%;
-    word-break: break-word; /* Lange Wörter umbrechen */
+    word-break: break-word;
     overflow-wrap: break-word;
-    white-space: normal; /* Erlaubt Zeilenumbrüche */
+    white-space: normal; 
 }
 
 .round-img {
-    width: 300px; /* oder eine andere Größe */
-    height: 300px; /* gleich wie width für einen perfekten Kreis */
+    width: 300px; 
+    height: 300px; 
     border-radius: 50%;
-    object-fit: cover; /* Verhindert Verzerrungen */
+    object-fit: cover; 
 }
 
 .round-img-small {
-    width: 35px; /* oder eine andere Größe */
-    height: 35px; /* gleich wie width für einen perfekten Kreis */
+    width: 35px; 
+    height: 35px; 
     border-radius: 50%;
-    object-fit: cover; /* Verhindert Verzerrungen */
+    object-fit: cover; 
 }
 
 .round-img-forum {
-    width: 45px; /* oder eine andere Größe */
-    height: 45px; /* gleich wie width für einen perfekten Kreis */
+    width: 45px; 
+    height: 45px; 
     border-radius: 50%;
-    object-fit: cover; /* Verhindert Verzerrungen */
+    object-fit: cover;
 }
 
 /*#####################################LandingPage#######################################*/
